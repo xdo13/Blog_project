@@ -7,15 +7,17 @@ spring:
     url: jdbc:mysql://localhost:3306/blogdb
     username: bloguser
     password: 12345
+  jpa:
+    properties.hibernate.format_sql: true
+    show-sql: true
+    hibernate.ddl-auto: none
+  sql.init:
+    data-locations: classpath:/data.sql
+    mode: always
 
 
-logging:
-  level:
+logging.level:
     org:
-      thymeleaf: DEBUG
       hibernate:
         SQL: INFO
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+        type.descriptor.sql.BasicBinder: TRACE
