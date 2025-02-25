@@ -1,37 +1,45 @@
 import { useEffect, useState } from 'react';
 import { getAllPosts } from '../api/posts';
 import { Post } from '../types/Post';
+import { Button, Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-//게시글 목록을 표시하는 페이지 컴포넌트
 const PostsPage = () => {
-  //게시글 상태 관리
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
 
-  //컴포넌트 마운트시 게시글 목록 불러오기
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
-        const data = await getAllPosts();  //API 호출을 통해 게시글 데이터 호출
-        setPosts(data);
-      } catch (error) {
-        console.error("API 호출 중 에러 발생", error);
-      }
+      const data = await getAllPosts();
+      setPosts(data);
     };
 
     fetchPosts();
   }, []);
 
   return (
-    <div>
-      <h2>블로그 글 목록 🚀</h2>
+    <Box sx={{ maxWidth: '600px', margin: 'auto', mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        블로그 게시글 📜
+      </Typography>
+
+      <Button 
+        variant="contained" 
+        color="primary" 
+        sx={{ mb: 2 }} 
+        onClick={() => navigate('/create-post')}
+      >
+        글 작성하기
+      </Button>
+
       {posts.map((post) => (
-        <div key={post.id}>
-          <h3>{post.title}</h3>
-          <p>{post.content}</p>
-          <small>{post.author} | {new Date(post.createdAt).toLocaleString()}</small>
-        </div>
+        <Box key={post.id} sx={{ p: 2, boxShadow: 1, mb: 2, borderRadius: 1 }}>
+          <Typography variant="h6">{post.title}</Typography>
+          <Typography variant="body2">{post.content}</Typography>
+          <Typography variant="caption">{post.author} | {new Date(post.createdAt).toLocaleString()}</Typography>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 };
 

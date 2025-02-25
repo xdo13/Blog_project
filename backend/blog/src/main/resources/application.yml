@@ -10,7 +10,7 @@ spring:
   jpa:
     properties.hibernate.format_sql: true
     show-sql: true
-    hibernate.ddl-auto: none
+    hibernate.ddl-auto: create
   sql.init:
     data-locations: classpath:/data.sql
     mode: always
