@@ -14,6 +14,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../../shared-theme/ColorModeIconDropdown';
 import Sitemark from './SitemarkIcon';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser, logout } from '../../../api/auth';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -34,6 +35,21 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const [user, setUser] = React.useState(null);
+
+  // ✅ 로그인된 사용자 확인
+  React.useEffect(() => {
+    const currentUser = getCurrentUser();
+    setUser(currentUser);
+  }, []);
+
+  // ✅ 로그아웃 실행
+  const handleLogout = () => {
+    logout();
+    alert('로그아웃 되었습니다.');
+    setUser(null);
+    navigate('/template/signin');
+  };
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -55,27 +71,16 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <Sitemark />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
-                Blog
-              </Button>
-              <Button variant="text" color="info" size="small">
-                React
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Spring Boot
-              </Button>
-              <Button variant="text" color="info" size="small">
-                JAVA
-              </Button>
-              <Button variant="text" color="info" size="small">
-                MySQL
-              </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
-                AWS
-              </Button>
-              
+              <Button variant="text" color="info" size="small">Blog</Button>
+              <Button variant="text" color="info" size="small">React</Button>
+              <Button variant="text" color="info" size="small">Spring Boot</Button>
+              <Button variant="text" color="info" size="small">JAVA</Button>
+              <Button variant="text" color="info" size="small">MySQL</Button>
+              <Button variant="text" color="info" size="small">AWS</Button>
             </Box>
           </Box>
+          
+          {/* ✅ 로그인 여부에 따라 버튼 변경 */}
           <Box
             sx={{
               display: { xs: 'none', md: 'flex' },
@@ -83,14 +88,29 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small" onClick={() => navigate('/template/signin')}>
-              로그인
-            </Button>
-            <Button color="primary" variant="contained" size="small" onClick={() => navigate('/template/signup')}>
-              회원가입
-            </Button>
+            {user ? (
+              <>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/create-post')}>
+                  ✍ 게시글 작성
+                </Button>
+                <Button color="error" variant="outlined" size="small" onClick={handleLogout}>
+                  🚪 로그아웃
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button color="primary" variant="text" size="small" onClick={() => navigate('/template/signin')}>
+                  로그인
+                </Button>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/template/signup')}>
+                  회원가입
+                </Button>
+              </>
+            )}
             <ColorModeIconDropdown />
           </Box>
+
+          {/* ✅ 모바일 메뉴 */}
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
             <ColorModeIconDropdown size="medium" />
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
@@ -107,33 +127,29 @@ export default function AppAppBar() {
               }}
             >
               <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                  }}
-                >
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <IconButton onClick={toggleDrawer(false)}>
                     <CloseRoundedIcon />
                   </IconButton>
                 </Box>
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
+                {user ? (
+                  <>
+                    <MenuItem onClick={() => navigate('/template/post/new')}>✍ 게시글 작성</MenuItem>
+                    <MenuItem onClick={handleLogout}>🚪 로그아웃</MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem onClick={() => navigate('/template/signin')}>로그인</MenuItem>
+                    <MenuItem onClick={() => navigate('/template/signup')}>회원가입</MenuItem>
+                  </>
+                )}
                 <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    Sign in
-                  </Button>
-                </MenuItem>
+                <MenuItem>Blog</MenuItem>
+                <MenuItem>React</MenuItem>
+                <MenuItem>Spring Boot</MenuItem>
+                <MenuItem>JAVA</MenuItem>
+                <MenuItem>MySQL</MenuItem>
+                <MenuItem>AWS</MenuItem>
               </Box>
             </Drawer>
           </Box>

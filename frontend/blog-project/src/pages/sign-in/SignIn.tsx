@@ -1,13 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -16,7 +12,8 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth';
 import AppTheme from '../../shared-theme/AppTheme';
-import ColorModeSelect from '../../shared-theme/ColorModeSelect';
+import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -33,33 +30,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
   },
 }));
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
-
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
-  const [form, setForm] = React.useState({ username: '', password: '' });
-  const [errors, setErrors] = React.useState({ username: '', password: '' });
+  const [form, setForm] = React.useState({ email: '', password: '' });
+  const [errors, setErrors] = React.useState({ email: '', password: '' });
 
   // 입력값 변경 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,11 +46,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     event.preventDefault();
 
     // 유효성 검사
-    let newErrors = { username: '', password: '' };
+    let newErrors = { email: '', password: '' };
     let isValid = true;
 
-    if (!form.username) {
-      newErrors.username = '아이디를 입력하세요.';
+    if (!form.email) {
+      newErrors.email = '이메일을 입력하세요.';
       isValid = false;
     }
     if (!form.password || form.password.length < 6) {
@@ -91,34 +65,33 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       const response = await login(form);
       console.log(response.data);
       alert('로그인 성공!');
-      navigate('/');
+      navigate('/template/blog'); // ✅ 로그인 후 홈 페이지로 이동
     } catch (error) {
-      alert('로그인 실패: ' + error.response?.data || '서버 오류');
+      alert('로그인 실패: ' + (error.response?.data || '서버 오류'));
     }
   };
 
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <SignInContainer direction="column" justifyContent="space-between">
-        <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
+      <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
         <Card variant="outlined">
           <Typography component="h1" variant="h4">
             로그인
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <FormControl>
-              <FormLabel htmlFor="username">아이디</FormLabel>
+              <FormLabel htmlFor="email">아이디</FormLabel>
               <TextField
-                name="username"
+                name="email"
                 required
                 fullWidth
-                id="username"
+                id="email"
                 placeholder="아이디 입력"
-                value={form.username}
+                value={form.email}
                 onChange={handleChange}
-                error={!!errors.username}
-                helperText={errors.username}
+                error={!!errors.email}
+                helperText={errors.email}
               />
             </FormControl>
             <FormControl>
@@ -136,20 +109,25 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 helperText={errors.password}
               />
             </FormControl>
-            <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="로그인 상태 유지" />
             <Button type="submit" fullWidth variant="contained">
               로그인
             </Button>
           </Box>
-          <Divider>또는</Divider>
+          <Divider>
+            <Typography sx={{ color: 'text.secondary' }}>또는</Typography>
+          </Divider>
           <Typography sx={{ textAlign: 'center' }}>
-            계정이 없으신가요?{' '}
+            회원이 아니신가요?{' '}
             <Link href="/template/signup" variant="body2">
-              회원가입
+              회원가입하기
+            </Link>
+            <br></br>
+            <Link href="/template/blog" variant="body2">
+              홈으로
             </Link>
           </Typography>
         </Card>
-      </SignInContainer>
+      </Stack>
     </AppTheme>
   );
 }

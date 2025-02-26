@@ -72,7 +72,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     try {
       await signUp(form);
       alert('회원가입 성공!');
-      navigate('/login'); // ✅ 회원가입 후 로그인 페이지로 이동
+      navigate('/template/signin'); // ✅ 회원가입 후 로그인 페이지로 이동
     } catch (error) {
       alert('회원가입 실패: ' + error.response?.data || '서버 오류');
     }
@@ -145,6 +145,10 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             이미 계정이 있나요?{' '}
             <Link href="/template/signin" variant="body2">
               로그인
+            </Link>
+            <br></br>
+            <Link href="/template/blog" variant="body2">
+              홈으로
             </Link>
           </Typography>
         </Card>

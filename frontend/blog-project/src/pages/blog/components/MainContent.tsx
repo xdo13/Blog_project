@@ -52,7 +52,7 @@ const cardData = [
     authors: [{ name: 'Minwoo Kwon', avatar: '/static/images/avatar/3.jpg' }],
   },
   {
-    img: 'https://picsum.photos/800/450?random=45',
+    img: 'https://picsum.photos/800/450?random=5',
     tag: 'MySQL',
     title: '다섯번째 게시물',
     description:
@@ -71,7 +71,7 @@ const cardData = [
   },
 ];
 
-const SyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   padding: 0,
@@ -220,43 +220,7 @@ export default function MainContent() {
             overflow: 'auto',
           }}
         >
-          <Chip onClick={handleClick} size="medium" label="모든 게시물" />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="항목 1"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="항목 2"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="항목 3"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="항목 4"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
+         
         </Box>
         <Box
           sx={{
@@ -267,15 +231,11 @@ export default function MainContent() {
             overflow: 'auto',
           }}
         >
-          <Search />
-          <IconButton size="small" aria-label="RSS feed">
-            <RssFeedRoundedIcon />
-          </IconButton>
         </Box>
       </Box>
       <Grid container spacing={2} columns={12}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <SyledCard
+          <StyledCard
             variant="outlined"
             onFocus={() => handleFocus(0)}
             onBlur={handleBlur}
@@ -304,10 +264,10 @@ export default function MainContent() {
               </StyledTypography>
             </SyledCardContent>
             <Author authors={cardData[0].authors} />
-          </SyledCard>
+          </StyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <SyledCard
+          <StyledCard
             variant="outlined"
             onFocus={() => handleFocus(1)}
             onBlur={handleBlur}
@@ -336,10 +296,10 @@ export default function MainContent() {
               </StyledTypography>
             </SyledCardContent>
             <Author authors={cardData[1].authors} />
-          </SyledCard>
+          </StyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <SyledCard
+          <StyledCard
             variant="outlined"
             onFocus={() => handleFocus(2)}
             onBlur={handleBlur}
@@ -368,13 +328,13 @@ export default function MainContent() {
               </StyledTypography>
             </SyledCardContent>
             <Author authors={cardData[2].authors} />
-          </SyledCard>
+          </StyledCard>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Box
             sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}
           >
-            <SyledCard
+            <StyledCard
               variant="outlined"
               onFocus={() => handleFocus(3)}
               onBlur={handleBlur}
@@ -407,8 +367,8 @@ export default function MainContent() {
                 </div>
               </SyledCardContent>
               <Author authors={cardData[3].authors} />
-            </SyledCard>
-            <SyledCard
+            </StyledCard>
+            <StyledCard
               variant="outlined"
               onFocus={() => handleFocus(4)}
               onBlur={handleBlur}
@@ -441,11 +401,11 @@ export default function MainContent() {
                 </div>
               </SyledCardContent>
               <Author authors={cardData[4].authors} />
-            </SyledCard>
+            </StyledCard>
           </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <SyledCard
+          <StyledCard
             variant="outlined"
             onFocus={() => handleFocus(5)}
             onBlur={handleBlur}
@@ -474,7 +434,7 @@ export default function MainContent() {
               </StyledTypography>
             </SyledCardContent>
             <Author authors={cardData[5].authors} />
-          </SyledCard>
+          </StyledCard>
         </Grid>
       </Grid>
     </Box>
