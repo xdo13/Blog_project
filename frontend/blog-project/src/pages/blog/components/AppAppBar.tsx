@@ -48,7 +48,7 @@ export default function AppAppBar() {
     logout();
     alert('로그아웃 되었습니다.');
     setUser(null);
-    navigate('/template/signin');
+    navigate('/blog');
   };
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -99,10 +99,10 @@ export default function AppAppBar() {
               </>
             ) : (
               <>
-                <Button color="primary" variant="text" size="small" onClick={() => navigate('/template/signin')}>
+                <Button color="primary" variant="text" size="small" onClick={() => navigate('/signin')}>
                   로그인
                 </Button>
-                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/template/signup')}>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/signup')}>
                   회원가입
                 </Button>
               </>
@@ -134,13 +134,13 @@ export default function AppAppBar() {
                 </Box>
                 {user ? (
                   <>
-                    <MenuItem onClick={() => navigate('/template/post/new')}>✍ 게시글 작성</MenuItem>
+                    <MenuItem onClick={() => navigate('/post/new')}>✍ 게시글 작성</MenuItem>
                     <MenuItem onClick={handleLogout}>🚪 로그아웃</MenuItem>
                   </>
                 ) : (
                   <>
-                    <MenuItem onClick={() => navigate('/template/signin')}>로그인</MenuItem>
-                    <MenuItem onClick={() => navigate('/template/signup')}>회원가입</MenuItem>
+                    <MenuItem onClick={() => navigate('/signin')}>로그인</MenuItem>
+                    <MenuItem onClick={() => navigate('/signup')}>회원가입</MenuItem>
                   </>
                 )}
                 <Divider sx={{ my: 3 }} />

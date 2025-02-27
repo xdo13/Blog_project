@@ -17,3 +17,6 @@
 
 ### 📌 기술 스택  <br> <br>
 Spring Boot, JAVA 17, React(Vite), JPA, MySQL, AWS, GitHub ,JWT
+
+
+>JWT 적용 및 회원가입, 로그인 기능 완료

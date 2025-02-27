@@ -1,17 +1,25 @@
 package com.company.blog.controller;
 
+import com.company.blog.Utils.JwtUtil;
 import com.company.blog.dto.LoginDto;
 import com.company.blog.dto.UserDto;
 import com.company.blog.entity.User;
 import com.company.blog.service.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+
 
     @PostMapping("/signup")
     public ResponseEntity<String> register(@RequestBody UserDto userDto) {
@@ -33,13 +44,30 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-        boolean isAuthenticated = userService.authenticateUser(loginDto);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-        if (isAuthenticated) {
-            return ResponseEntity.ok("로그인 성공!");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: 아이디 또는 비밀번호가 틀렸습니다.");
-        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtUtil.generateToken(request.getEmail());
+
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
+    // ✅ 로그인 요청 DTO
+    @Getter
+    @Setter
+    static
+    class LoginRequest {
+        private String email;
+        private String password;
+        // ✅ Getter, Setter 추가
+    }
+
+    // ✅ 로그인 응답 DTO
+    class AuthResponse {
+        private String token;
+        public AuthResponse(String token) { this.token = token; }
+        public String getToken() { return token; }
     }
 }

@@ -65,7 +65,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       const response = await login(form);
       console.log(response.data);
       alert('로그인 성공!');
-      navigate('/template/blog'); // ✅ 로그인 후 홈 페이지로 이동
+      navigate('/blog'); // ✅ 로그인 후 홈 페이지로 이동
     } catch (error) {
       alert('로그인 실패: ' + (error.response?.data || '서버 오류'));
     }
@@ -118,11 +118,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           </Divider>
           <Typography sx={{ textAlign: 'center' }}>
             회원이 아니신가요?{' '}
-            <Link href="/template/signup" variant="body2">
+            <Link href="/signup" variant="body2">
               회원가입하기
             </Link>
             <br></br>
-            <Link href="/template/blog" variant="body2">
+            <Link href="/blog" variant="body2">
               홈으로
             </Link>
           </Typography>
