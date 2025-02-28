@@ -14,9 +14,8 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5173") // ✅ React 프론트엔드 URL
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
+                        .allowedOrigins("http://localhost:5173") // ✅ 프론트엔드 도메인 허용
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowCredentials(true);
             }
         };

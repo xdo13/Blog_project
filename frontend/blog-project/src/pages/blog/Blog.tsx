@@ -5,6 +5,7 @@ import AppTheme from '../../shared-theme/AppTheme';
 import AppAppBar from './components/AppAppBar';
 import MainContent from './components/MainContent';
 import Footer from './components/Footer';
+import PostList from '../PostList';
 
 export default function Blog(props: { disableCustomTheme?: boolean }) {
   return (
@@ -18,6 +19,7 @@ export default function Blog(props: { disableCustomTheme?: boolean }) {
         sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
       >
         <MainContent />
+        <PostList/>
       </Container>
       <Footer />
     </AppTheme>

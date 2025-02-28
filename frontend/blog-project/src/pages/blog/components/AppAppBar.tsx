@@ -90,7 +90,7 @@ export default function AppAppBar() {
           >
             {user ? (
               <>
-                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/create-post')}>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/blog/create')}>
                   ✍ 게시글 작성
                 </Button>
                 <Button color="error" variant="outlined" size="small" onClick={handleLogout}>
@@ -99,10 +99,10 @@ export default function AppAppBar() {
               </>
             ) : (
               <>
-                <Button color="primary" variant="text" size="small" onClick={() => navigate('/signin')}>
+                <Button color="primary" variant="text" size="small" onClick={() => navigate('/blog/signin')}>
                   로그인
                 </Button>
-                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/signup')}>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/blog/signup')}>
                   회원가입
                 </Button>
               </>

@@ -39,4 +39,9 @@ public class UserService {
                 .map(user -> passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) // ✅ 비밀번호 검증
                 .orElse(false); // ✅ 아이디가 없으면 false 반환
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
 }

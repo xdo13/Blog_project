@@ -24,7 +24,7 @@ const cardData = [
     description:
       '이 자리에 첫번째 게시물에 대한 설명이 들어갑니다',
     authors: [
-      { name: 'Minwoo Kwon', avatar: '/static/images/avatar/1.jpg' },
+      { name: 'Minwoo Kwon', },
     ],
   },
   {
@@ -33,7 +33,7 @@ const cardData = [
     title: '두번째 게시물',
     description:
       '이 자리에 두번째 게시물에 대한 설명이 들어갑니다',
-    authors: [{ name: 'Minwoo Kwon', avatar: '/static/images/avatar/6.jpg' }],
+    authors: [{ name: 'Minwoo Kwon' }],
   },
   {
     img: 'https://picsum.photos/800/450?random=3',
@@ -41,7 +41,7 @@ const cardData = [
     title: '세번째 게시물',
     description:
       '현재는 랜덤 사진이 게시물 썸네일로 나오는 상태입니다.',
-    authors: [{ name: 'Minwoo Kwon', avatar: '/static/images/avatar/7.jpg' }],
+    authors: [{ name: 'Minwoo Kwon',  }],
   },
   {
     img: 'https://picsum.photos/800/450?random=4',
@@ -49,7 +49,7 @@ const cardData = [
     title: "네번째 게시물",
     description:
       "Take a look at our company's journey and the milestones we've achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.",
-    authors: [{ name: 'Minwoo Kwon', avatar: '/static/images/avatar/3.jpg' }],
+    authors: [{ name: 'Minwoo Kwon', }],
   },
   {
     img: 'https://picsum.photos/800/450?random=5',
@@ -58,7 +58,7 @@ const cardData = [
     description:
       "다섯번째 게시물에 해당하는 간략한 설명이나 한 줄 요약이 들어가는 위치입니다.",
     authors: [
-      { name: '권민우', avatar: '/static/images/avatar/4.jpg' },
+      { name: '권민우',  },
     ],
   },
   {
@@ -67,7 +67,7 @@ const cardData = [
     title: 'Maximizing efficiency with our latest product updates',
     description:
       'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
-    authors: [{ name: 'Minwoo Kwon', avatar: '/static/images/avatar/2.jpg' }],
+    authors: [{ name: 'Minwoo Kwon', }],
   },
 ];
 

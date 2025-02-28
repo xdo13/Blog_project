@@ -67,7 +67,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       alert('로그인 성공!');
       navigate('/blog'); // ✅ 로그인 후 홈 페이지로 이동
     } catch (error) {
-      alert('로그인 실패: ' + (error.response?.data || '서버 오류'));
+      alert('로그인 실패: ' + (error.response?.data || '아이디 혹은 비밀번호가 틀렸습니다.'));
     }
   };
 

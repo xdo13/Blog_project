@@ -1,17 +1,13 @@
-import axios from 'axios';
-import { Post } from '../types/Post';
+import axios from "axios";
 
-//api기본 url 설정
-const API_URL = '/api/posts';
+const API_BASE_URL = "http://localhost:9090/api/post";
 
-//모든 게시글 조회
-export const getAllPosts = async (): Promise<Post[]> => {
-  const response = await axios.get<Post[]>(API_URL);
-  return response.data;
-};
-
-//새로운 게시글 생성
-export const createPost = async (post: Omit<Post, 'id' | 'createdAt'>): Promise<Post> => {
-  const response = await axios.post<Post>(API_URL, post);
-  return response.data;
+// ✅ 게시글 생성 API (JWT 포함)
+export const createPost = async (postData: { title: string; content: string; author: string }, token: string) => {
+  return await axios.post(`${API_BASE_URL}/create`, postData, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // ✅ JWT 포함
+    },
+  });
 };
