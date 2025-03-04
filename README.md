@@ -21,5 +21,6 @@ Spring Boot, JAVA 17, React(Vite), JPA, MySQL, AWS, GitHub ,JWT
 >3.4 게시판 세부 페이지 구현 완료
 
 
+### 📌 프로젝트 설명  <br> <br>
 ![image](https://github.com/user-attachments/assets/28c51cf2-a36f-46d7-a600-831250d8ca37)
 >헤더 바에는 이 프로젝트를 하면서 쓴 기술스택을 나열하여 메뉴바처럼 만듦
