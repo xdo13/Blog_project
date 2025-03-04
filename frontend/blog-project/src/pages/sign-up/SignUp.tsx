@@ -16,6 +16,8 @@ import { styled } from '@mui/material/styles';
 import AppTheme from '../../shared-theme/AppTheme';
 import { useNavigate } from 'react-router-dom'; // ✅ 페이지 이동을 위한 Hook 추가
 import { signUp } from '../../api/auth'; // ✅ API 연동 추가
+import AppAppBar from '../blog/components/AppAppBar';
+import Footer from '../blog/components/Footer';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -80,6 +82,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
 
   return (
     <AppTheme {...props}>
+      <AppAppBar />
       <CssBaseline enableColorScheme />
       <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
         <Card variant="outlined">
@@ -153,6 +156,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           </Typography>
         </Card>
       </Stack>
+      <Footer />
     </AppTheme>
   );
 }

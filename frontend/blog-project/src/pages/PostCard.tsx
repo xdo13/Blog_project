@@ -23,7 +23,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
           {post.content.length > 100 ? post.content.substring(0, 100) + '...' : post.content}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar sx={{ width: 32, height: 32, mr: 1 }}>{post.author[0]}</Avatar>
+          <Avatar sx={{ width: 32, height: 32, mr: 1}}></Avatar>
           <Typography variant="body2">{post.author}</Typography>
         </Box>
       </CardContent>

@@ -55,6 +55,10 @@ export default function AppAppBar() {
     setOpen(newOpen);
   };
 
+  const handleClick = () => {
+    navigate("/blog"); // 원하는 경로로 설정
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -69,7 +73,9 @@ export default function AppAppBar() {
       <Container maxWidth="lg">
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            <Sitemark />
+          <IconButton onClick={handleClick}>
+           <Sitemark />
+          </IconButton>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small">Blog</Button>
               <Button variant="text" color="info" size="small">React</Button>
@@ -90,7 +96,7 @@ export default function AppAppBar() {
           >
             {user ? (
               <>
-                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/blog/create')}>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/post/create')}>
                   ✍ 게시글 작성
                 </Button>
                 <Button color="error" variant="outlined" size="small" onClick={handleLogout}>
@@ -99,10 +105,10 @@ export default function AppAppBar() {
               </>
             ) : (
               <>
-                <Button color="primary" variant="text" size="small" onClick={() => navigate('/blog/signin')}>
+                <Button color="primary" variant="text" size="small" onClick={() => navigate('/signin')}>
                   로그인
                 </Button>
-                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/blog/signup')}>
+                <Button color="primary" variant="contained" size="small" onClick={() => navigate('/signup')}>
                   회원가입
                 </Button>
               </>

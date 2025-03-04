@@ -1,5 +1,6 @@
 package com.company.blog.controller;
 
+import ch.qos.logback.core.net.SMTPAppenderBase;
 import com.company.blog.Utils.JwtUtil;
 import com.company.blog.dto.LoginDto;
 import com.company.blog.dto.UserDto;
@@ -50,9 +51,13 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        User user = userService.findByEmail(request.getEmail()); // 이메일로 사용자 조회
+
         String token = jwtUtil.generateToken(request.getEmail());
 
-        return ResponseEntity.ok(new AuthResponse(token));
+
+        return ResponseEntity.ok(new AuthResponse(token, user.getUsername()));
+
     }
     // ✅ 로그인 요청 DTO
     @Getter
@@ -67,7 +72,8 @@ public class AuthController {
     // ✅ 로그인 응답 DTO
     class AuthResponse {
         private String token;
-        public AuthResponse(String token) { this.token = token; }
+        private String username; // ✅ username 추가
+        public AuthResponse(String token, String username) { this.token = token;  this.username = username; }
         public String getToken() { return token; }
     }
 }

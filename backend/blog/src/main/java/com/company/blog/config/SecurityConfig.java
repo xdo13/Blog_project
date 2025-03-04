@@ -50,8 +50,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/post/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/all", "/api/post/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/post/create").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/post/{id}").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

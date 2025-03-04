@@ -9,11 +9,11 @@ export const signUp = async (userData: { username: string; password: string; ema
 };
 
 // ✅ 로그인 API 요청 후 세션 저장
-export const login = async (loginData: { email: string; password: string }, rememberMe: boolean) => {
+export const login = async (loginData: { username: string; password: string }, rememberMe: boolean) => {
   const response = await axios.post(`${API_URL}/login`, loginData, { withCredentials: true });
 
   if (response.status === 200) {
-    const userData = { email: loginData.email };
+    const userData = { username: loginData.username };
     if (rememberMe) {
       localStorage.setItem('user', JSON.stringify(userData)); // ✅ 영구 저장
     } else {

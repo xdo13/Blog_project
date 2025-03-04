@@ -14,6 +14,8 @@ import { login } from '../../api/auth';
 import AppTheme from '../../shared-theme/AppTheme';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
+import AppAppBar from '../blog/components/AppAppBar';
+import Footer from '../blog/components/Footer';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -63,8 +65,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     try {
       const response = await login(form);
-      console.log(response.data);
-      alert('로그인 성공!');
+      const token = response.data.token; // JWT 토큰 추출
+      console.log(token);
+      alert("로그인 성공!");
+      localStorage.setItem("jwtToken", token);
+
       navigate('/blog'); // ✅ 로그인 후 홈 페이지로 이동
     } catch (error) {
       alert('로그인 실패: ' + (error.response?.data || '아이디 혹은 비밀번호가 틀렸습니다.'));
@@ -73,6 +78,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
   return (
     <AppTheme {...props}>
+      <AppAppBar />
       <CssBaseline enableColorScheme />
       <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
         <Card variant="outlined">
@@ -128,6 +134,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           </Typography>
         </Card>
       </Stack>
+      <Footer />
     </AppTheme>
   );
 }

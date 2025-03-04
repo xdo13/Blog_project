@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { TextField, Button, Box, Typography, Container } from "@mui/material";
+import { TextField, Button, Box, Typography, Container, CssBaseline, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // ✅ Axios 추가
+import AppAppBar from "./blog/components/AppAppBar";
+import AppTheme from "../shared-theme/AppTheme";
+import Footer from "./blog/components/Footer";
 
 const API_URL = "http://localhost:9090/api/post"; // ✅ 백엔드 API URL
 
@@ -10,7 +13,7 @@ const CreatePostPage = () => {
   const [form, setForm] = useState({
     title: "",
     content: "",
-    author: "", // ✅ 작성자 필드 추가 (로그인 여부와 관계없이 입력 가능)
+    username: "", // ✅ 작성자 필드 추가 (로그인 여부와 관계없이 입력 가능)
   });
 
   // 입력값 변경 핸들러
@@ -23,7 +26,7 @@ const CreatePostPage = () => {
   };
 
   // 게시글 작성 API 요청 함수
-  const createPost = async (postData: { title: string; content: string; author: string }) => {
+  const createPost = async (postData: { title: string; content: string; username: string }) => {
     try {
       const response = await axios.post(`${API_URL}/create`, postData);
       return response.data;
@@ -42,7 +45,7 @@ const CreatePostPage = () => {
       const postData = {
         title: form.title,
         content: form.content,
-        author: form.author || "익명", // 로그인하지 않은 경우 "익명" 처리
+        username: form.username || "익명", // 로그인하지 않은 경우 "익명" 처리
       };
 
       // ✅ API 요청 (토큰 없이도 가능)
@@ -57,8 +60,12 @@ const CreatePostPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 4, p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "white" }}>
+    <AppTheme>
+        <AppAppBar />
+        <CssBaseline enableColorScheme />
+              <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
+    <Container maxWidth="md">
+      <Box sx={{ mt: 0, p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "white"}}>
         <Typography variant="h4" gutterBottom>
           블로그 글 작성 📝
         </Typography>
@@ -81,14 +88,15 @@ const CreatePostPage = () => {
             margin="normal"
             multiline
             rows={6}
+            sx={{ minHeight: "100px" }}
             required
           />
-          {/* ✅ 작성자는 로그인한 경우 자동 설정되지만, 로그인 안 해도 수동 입력 가능 */}
+          {/* ✅ 작성자는 로그인한 경우 자동 설정되지만 (구현 안됨), 로그인 안 해도 수동 입력 가능 */}
           <TextField
             fullWidth
             label="작성자"
-            name="author"
-            value={form.author}
+            name="username"
+            value={form.username}
             onChange={handleChange}
             margin="normal"
             required
@@ -99,6 +107,10 @@ const CreatePostPage = () => {
         </form>
       </Box>
     </Container>
+    </Stack>
+    <Footer/>
+    </AppTheme>
+    
   );
 };
 
