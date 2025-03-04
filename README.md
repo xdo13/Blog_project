@@ -17,4 +17,5 @@
 Spring Boot, JAVA 17, React(Vite), JPA, MySQL, AWS, GitHub ,JWT
 
 
->JWT 적용 및 회원가입, 로그인 기능 완료
+>2.28 JWT 적용 및 회원가입, 로그인 기능 완료
+>3.4 게시판 세부 페이지 구현 완료
