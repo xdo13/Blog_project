@@ -23,6 +23,13 @@ Spring Boot, JAVA 17, React(Vite), JPA, MySQL, AWS, GitHub ,JWT
 ### 📌 프로젝트 설명  <br> <br>
 ![image](https://github.com/user-attachments/assets/28c51cf2-a36f-46d7-a600-831250d8ca37)
 >헤더 바에는 이 프로젝트를 하면서 쓴 기술스택을 나열하여 메뉴바처럼 만듦
+</br>
+![image](https://github.com/user-attachments/assets/e735e21e-9d61-42d7-bb01-36e63b380e9a)
+>메인 화면 첫번째는 랜덤이미지를 포함한 견본 게시판이 있습니다.
+
+![image](https://github.com/user-attachments/assets/f9f0ee12-84d7-42e2-9d12-91d1c35fc935)
+>그 아래 화면에는 게시판 작성시 DB에 저장되고 그것을 읽어오는 실기능의 게시판이 있습니다.
+
 
 ### 📌 JWT 토큰 사용 종류 및 설명  <br> <br>
 ![image](https://github.com/user-attachments/assets/51dd529a-1348-4f4b-b60c-e3c9fd45f857)
