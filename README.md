@@ -14,7 +14,7 @@
 
 ### 📌 기술 스택  <br> <br>
 
-springBoot, JAVA 17,react, JPA, MySQL, AWS, GitHub ,JWT
+![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white&logoWidth=15), JAVA 17,react, JPA, MySQL, AWS, GitHub ,JWT
 
 
 >2.28 JWT 적용 및 회원가입, 로그인 기능 완료
