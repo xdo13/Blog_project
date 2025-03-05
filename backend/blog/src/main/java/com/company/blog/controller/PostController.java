@@ -6,6 +6,7 @@ import com.company.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +72,13 @@ public class PostController {
 
         postRepository.save(post);
         return ResponseEntity.ok(post);
+    }
+    // ✅ 게시글 삭제 API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName(); // JWT에서 현재 로그인한 유저 가져오기
+        postService.deletePost(id);
+        return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
 
 

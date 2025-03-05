@@ -3,7 +3,6 @@ package com.company.blog.config;
 import com.company.blog.Utils.JwtFilter;
 import com.company.blog.Utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -46,15 +45,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
+                .cors(Customizer.withDefaults()) // CORS 설정 기본값 사용
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/post/all", "/api/post/{id}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/post/create").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/post/{id}").permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll() // 회원가입, 로그인은 모든 사용자 접근 가능
+                        .requestMatchers(HttpMethod.GET, "/api/post/all", "/api/post/{id}").permitAll() // 게시글 조회는 허용
+                        .requestMatchers(HttpMethod.POST, "/api/post/create").authenticated() // ✅ 게시글 작성은 로그인 필요
+                        .requestMatchers(HttpMethod.PUT, "/api/post/**").authenticated() // ✅ 게시글 수정은 로그인 필요
+                        .requestMatchers(HttpMethod.DELETE, "/api/post/**").authenticated() // ✅ 게시글 삭제도 로그인 필요
+                        .anyRequest().authenticated()) // 나머지 요청은 인증 필요
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 X (JWT 기반 인증)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -68,4 +68,3 @@ public class SecurityConfig {
         return provider;
     }
 }
-

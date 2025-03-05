@@ -183,9 +183,9 @@ export default function MainContent() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <div>
         <Typography variant="h1" gutterBottom>
-          민우의 블로그
+          Min의 블로그
         </Typography>
-        <Typography>민우의 개인 포트폴리오 블로그 사이트</Typography>
+        <Typography>Min의 개인 포트폴리오 블로그 사이트</Typography>
       </div>
       <Box
         sx={{

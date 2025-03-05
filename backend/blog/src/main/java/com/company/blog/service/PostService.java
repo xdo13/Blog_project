@@ -3,6 +3,8 @@ package com.company.blog.service;
 import com.company.blog.entity.Post;
 import com.company.blog.repository.PostRepository;
 import org.springframework.stereotype.Service;
+
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -24,5 +26,13 @@ public class PostService {
 
     public List<Post> getAllPosts() {
         return postRepository.findAll();
+
+    }
+    // ✅ 게시글 삭제 로직
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        postRepository.delete(post);
     }
 }

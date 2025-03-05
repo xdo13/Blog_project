@@ -7,7 +7,7 @@ export const createPost = async (postData: { title: string; content: string; use
   return await axios.post(`${API_BASE_URL}/create`, postData, {
     headers: {
       "Content-Type": "application/json",
-      usernameization: `Bearer ${token}`, // ✅ JWT 포함
+      Authorization: `Bearer ${token}`, // ✅ JWT 포함
     },
   });
   
@@ -23,8 +23,23 @@ export const updatePost = async (id: number, postData: { title: string; content:
   const response = await axios.put(`${API_BASE_URL}/${id}`, postData, {
     headers: {
       "Content-Type": "application/json",
-      usernameization: `Bearer ${token}`, // 🔹 JWT 토큰 추가
+      Authorization: `Bearer ${token}`, // 🔹 JWT 토큰 추가
     },
   });
   return response.data;
+};
+// ✅ 게시글 삭제 API 요청 함수
+export const deletePost = async (postId: number, token: string) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/${postId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ JWT 포함
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("게시글 삭제 실패:", error);
+    throw error;
+  }
 };

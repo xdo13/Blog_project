@@ -99,9 +99,12 @@ export default function AppAppBar() {
                 <Button color="primary" variant="contained" size="small" onClick={() => navigate('/post/create')}>
                   ✍ 게시글 작성
                 </Button>
-                <Button color="error" variant="outlined" size="small" onClick={handleLogout}>
-                  🚪 로그아웃
+                <Button color="primary" variant="contained" size="small" onClick={logout}>
+                  로그아웃
                 </Button>
+
+               
+
               </>
             ) : (
               <>

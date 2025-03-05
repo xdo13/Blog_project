@@ -4,14 +4,15 @@ import { Container, Typography, Paper, CircularProgress, Stack, CssBaseline, But
 import AppTheme from "../shared-theme/AppTheme";
 import AppAppBar from "./blog/components/AppAppBar";
 import Footer from "./blog/components/Footer";
-import { getPostById } from "../api/posts";
+import { getPostById, deletePost } from "../api/posts";
 
 const PostDetail: React.FC = () => {
   const { postId } = useParams(); // ✅ URL에서 게시글 ID 가져오기
   const navigate = useNavigate();
-  const [post, setPost] = useState<{ title: string; content: string; username: string } | null>(null);
+  const [post, setPost] = useState<{ title: string; content: string; author: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<string | null>(null); // ✅ 로그인한 사용자 정보
+  const token = localStorage.getItem("jwtToken"); // ✅ JWT 토큰 가져오기
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -24,15 +25,24 @@ const PostDetail: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchPost();
 
-    // ✅ 로그인한 사용자 정보 가져오기
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser).username); // 로그인한 사용자의 이메일 저장
-    }
+    // ✅ username을 localStorage에서 가져옴
+    const storedUser = localStorage.getItem("username");
+    setCurrentUser(storedUser ? storedUser.trim() : null);
   }, [postId]);
+
+  // ✅ 게시글 삭제 핸들러
+  const handleDelete = async () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      await deletePost(Number(postId), token || "");
+      alert("게시글이 삭제되었습니다.");
+      navigate("/blog"); // ✅ 삭제 후 목록으로 이동
+    } catch (error) {
+      alert("게시글 삭제 실패!");
+    }
+  };
 
   if (loading) return <CircularProgress />;
 
@@ -48,23 +58,28 @@ const PostDetail: React.FC = () => {
                 {post.title}
               </Typography>
               <Typography variant="subtitle1" sx={{ color: "gray" }}>
-                작성자: {post.username}
+                작성자: {post.author}
               </Typography>
               <Typography variant="body1" sx={{ mt: 2 }}>
                 {post.content}
               </Typography>
 
-              {/* ✅ 로그인한 사용자와 작성자가 같다면 수정 버튼 표시 */}
-               {currentUser === post.username && ( 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 2 }}
-                  onClick={() => navigate(`/post/edit/${postId}`)} // ✅ 수정 페이지로 이동
-                >
-                  수정하기
-                </Button>
-               )} 
+              {/* ✅ 로그인한 사용자와 작성자가 같다면 수정/삭제 버튼 표시 */}
+              {currentUser === post.author && (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 2, mr: 2 }}
+                    onClick={() => navigate(`/post/edit/${postId}`)} // ✅ 수정 페이지로 이동
+                  >
+                    수정하기
+                  </Button>
+                  <Button variant="contained" color="error" sx={{ mt: 2 }} onClick={handleDelete}>
+                    삭제하기
+                  </Button>
+                </>
+              )}
             </Paper>
           ) : (
             <Typography variant="h5">게시글을 찾을 수 없습니다.</Typography>

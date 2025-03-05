@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,19 +48,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+        );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtUtil.generateToken(loginRequest.getEmail());
 
-        User user = userService.findByEmail(request.getEmail()); // 이메일로 사용자 조회
+        User user = userService.findByEmail(loginRequest.getEmail()); // ✅ 사용자 정보 가져오기
 
-        String token = jwtUtil.generateToken(request.getEmail());
+        // ✅ username을 응답에 포함
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("username", user.getUsername());
 
-
-        return ResponseEntity.ok(new AuthResponse(token, user.getUsername()));
-
+        return ResponseEntity.ok(response);
     }
     // ✅ 로그인 요청 DTO
     @Getter

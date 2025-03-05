@@ -15,16 +15,18 @@ const PostEditPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        console.log("현재 JWT 토큰:", token); // ✅ 토큰이 잘 가져와지는지 확인
         const response = await axios.get(`http://localhost:9090/api/post/${postId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setForm(response.data); // 🔹 기존 데이터 채우기
+        setForm(response.data);
       } catch (error) {
         console.error("게시글 불러오기 실패:", error);
         alert("게시글을 불러오는 데 실패했습니다.");
-        navigate("/post"); // 🔹 실패 시 목록으로 이동
+        navigate("/blog");
       }
     };
+    
     fetchPost();
   }, [postId, token, navigate]);
 
