@@ -13,7 +13,7 @@
 
 
 ### 📌 기술 스택  <br> <br>
-Spring Boot, JAVA 17, React(Vite), JPA, MySQL, AWS, GitHub ,JWT
+#6DB33F, JAVA 17, React(Vite), JPA, MySQL, AWS, GitHub ,JWT
 
 
 >2.28 JWT 적용 및 회원가입, 로그인 기능 완료
