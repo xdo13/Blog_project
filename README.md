@@ -17,8 +17,9 @@
 ![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white&logoWidth=15) ![Java 17](https://img.shields.io/badge/Java%2017-ED8B00?style=flat-square&logo=openjdk&logoColor=white&logoWidth=15)  ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB&logoWidth=15) ![JPA](https://img.shields.io/badge/JPA-6DB33F?style=flat-square&logo=hibernate&logoColor=white&logoWidth=15)  ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white&logoWidth=15)  ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonaws&logoColor=white&logoWidth=15)  ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white&logoWidth=15)  ![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white&logoWidth=15)
 
 
->2.28 JWT 적용 및 회원가입, 로그인 기능 완료
->3.4 게시판 세부 페이지 구현 완료
+>2.28 JWT 적용 및 회원가입, 로그인 기능 완료 <br>
+>3.4 게시판 세부 페이지 구현 완료 <br>
+>3.7 무한 스크롤 기능 구현 + css 수정 완료
 
 
 ### 📌 프로젝트 설명  <br> <br>
