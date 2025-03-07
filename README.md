@@ -32,6 +32,7 @@
 
 ![image](https://github.com/user-attachments/assets/f9f0ee12-84d7-42e2-9d12-91d1c35fc935)
 >그 아래 화면에는 게시판 작성시 DB에 저장되고 그것을 읽어오는 실기능의 게시판이 있습니다.
+>페이스북처럼 스크롤을 내리면 계속 게시글이 나타납니다.
 
 
 ### 📌 JWT 토큰 사용 종류 및 설명  <br> <br>
