@@ -2,9 +2,10 @@ package com.company.blog.service;
 
 import com.company.blog.entity.Post;
 import com.company.blog.repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -24,15 +25,14 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-
+    public Page<Post> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
-    // ✅ 게시글 삭제 로직
+
+    // 게시글 삭제 로직
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
-
         postRepository.delete(post);
     }
 }

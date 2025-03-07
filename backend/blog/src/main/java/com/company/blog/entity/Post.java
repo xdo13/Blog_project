@@ -3,6 +3,8 @@ package com.company.blog.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -22,4 +24,7 @@ public class Post {
     private String content;
 
     private String author; // 작성자 정보
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

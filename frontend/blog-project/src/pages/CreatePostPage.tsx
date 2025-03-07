@@ -49,7 +49,7 @@ const CreatePostPage = () => {
           localStorage.removeItem("jwtToken");
           localStorage.removeItem("username");
           setToken(null);
-          navigate("/login");
+          navigate("/signin");
         }
       } catch (error) {
         console.error("🚀 JWT 디코딩 중 오류 발생:", error);
@@ -57,7 +57,7 @@ const CreatePostPage = () => {
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("username");
         setToken(null);
-        navigate("/login");
+        navigate("/signin");
       }
     }
   }, [token]);
@@ -128,7 +128,7 @@ const CreatePostPage = () => {
       <CssBaseline enableColorScheme />
       <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>
         <Container maxWidth="md">
-          <Box sx={{ mt: 0, p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "white" }}>
+          <Box sx={{ mt: 0, p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "background.paper" }}>
             <Typography variant="h4" gutterBottom>
               블로그 글 작성 📝
             </Typography>

@@ -4,6 +4,10 @@ import com.company.blog.entity.Post;
 import com.company.blog.repository.PostRepository;
 import com.company.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -40,8 +44,13 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Post>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<List<Post>> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Post> postPage = postService.getAllPosts(pageable);
+        return ResponseEntity.ok(postPage.getContent());
     }
 
     // ✅ 게시글 상세 조회 API 추가
