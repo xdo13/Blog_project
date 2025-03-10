@@ -16,6 +16,7 @@ export const login = async (loginData: { email: string; password: string }, reme
     const { token, username } = response.data; // ✅ username 추가
     localStorage.setItem("jwtToken", token);
     localStorage.setItem("username", username); // ✅ username 저장
+    localStorage.setItem("email", loginData.email); // ✅ email 저장
 
     if (rememberMe) {
       localStorage.setItem("user", JSON.stringify({ email: loginData.email, username }));

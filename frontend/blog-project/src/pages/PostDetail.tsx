@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Typography, Paper, CircularProgress, Stack, CssBaseline, Button } from "@mui/material";
+import { Container, Typography, Paper, CircularProgress, Stack, CssBaseline, Button, Box } from "@mui/material";
 import AppTheme from "../shared-theme/AppTheme";
 import AppAppBar from "./blog/components/AppAppBar";
 import Footer from "./blog/components/Footer";
 import { getPostById, deletePost } from "../api/posts";
+import CommentSection from "./CommentSection";
 
 const PostDetail: React.FC = () => {
   const { postId } = useParams(); // ✅ URL에서 게시글 ID 가져오기
   const navigate = useNavigate();
-  const [post, setPost] = useState<{ title: string; content: string; author: string } | null>(null);
+  const [post, setPost] = useState<{ id: number; title: string; content: string; author: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<string | null>(null); // ✅ 로그인한 사용자 정보
   const token = localStorage.getItem("jwtToken"); // ✅ JWT 토큰 가져오기
@@ -54,9 +55,35 @@ const PostDetail: React.FC = () => {
         <Container maxWidth="md" sx={{ mt: 5 }}>
           {post ? (
             <Paper sx={{ p: 3 }}>
-              <Typography variant="h3" gutterBottom>
-                {post.title}
-              </Typography>
+              {/* ✅ 제목과 버튼을 같은 행에 배치 */}
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="h3" gutterBottom>
+                  {post.title}
+                </Typography>
+
+                {/* ✅ 로그인한 사용자와 작성자가 같다면 수정/삭제 버튼 표시 */}
+                {currentUser === post.author && (
+                  <Box>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ ml: 2 }}
+                      onClick={() => navigate(`/post/edit/${postId}`)} // ✅ 수정 페이지로 이동
+                    >
+                      수정하기
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      sx={{ ml: 2 }}
+                      onClick={handleDelete}
+                    >
+                      삭제하기
+                    </Button>
+                  </Box>
+                )}
+              </Stack>
+
               <Typography variant="subtitle1" sx={{ color: "gray" }}>
                 작성자: {post.author}
               </Typography>
@@ -64,22 +91,10 @@ const PostDetail: React.FC = () => {
                 {post.content}
               </Typography>
 
-              {/* ✅ 로그인한 사용자와 작성자가 같다면 수정/삭제 버튼 표시 */}
-              {currentUser === post.author && (
-                <>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 2, mr: 2 }}
-                    onClick={() => navigate(`/post/edit/${postId}`)} // ✅ 수정 페이지로 이동
-                  >
-                    수정하기
-                  </Button>
-                  <Button variant="contained" color="error" sx={{ mt: 2 }} onClick={handleDelete}>
-                    삭제하기
-                  </Button>
-                </>
-              )}
+              {/* ✅ 댓글과의 간격 추가 */}
+              <Box sx={{ mt: 4 }}>
+                <CommentSection postId={post.id} />
+              </Box>
             </Paper>
           ) : (
             <Typography variant="h5">게시글을 찾을 수 없습니다.</Typography>

@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Component
 public class JwtUtil {
 
@@ -68,13 +70,16 @@ public class JwtUtil {
     }
 
     // 이 메서드를 추가해야 합니다
-    public Boolean validateToken(String token) {
+    public Boolean validateToken(String token, String email) { // ✅ email 파라미터 추가
         try {
-            // 토큰이 만료되었는지 확인
-            return !isTokenExpired(token);
+            Claims claims = extractAllClaims(token);
+            String subject = claims.getSubject(); // 토큰의 subject (email)
+            boolean isNotExpired = !isTokenExpired(token);
+            boolean isSubjectMatch = subject.equals(email); // ✅ email 일치 확인
+            return isNotExpired && isSubjectMatch; // ✅ 두 조건 모두 만족해야 유효
         } catch (Exception e) {
-            // 토큰 파싱 중 예외 발생 시 유효하지 않은 토큰으로 처리
+            log.error("토큰 유효성 검사 실패: {}", e.getMessage());
             return false;
         }
     }
-}
+    }
