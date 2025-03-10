@@ -44,3 +44,4 @@
 ![image](https://github.com/user-attachments/assets/51dd529a-1348-4f4b-b60c-e3c9fd45f857)
 
 >본 프로젝트에서는 빠른 기능 시험을 위해 LocalStorage를 사용하였지만, 중요한 프로젝트에서는 보안이 높은 Http Cookie이상으로 사용하여야 함.
+>따라서 로그아웃시에 로컬스토리지를 비워 정보가 사라지게 기능 구현을 했음.
