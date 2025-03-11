@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll() // 회원가입, 로그인은 모든 사용자 접근 가능
                         .requestMatchers(HttpMethod.GET, "/api/post/all", "/api/post/{id}", "/api/comments/{postId}").permitAll() // 게시글 조회는 허용
                         .requestMatchers(HttpMethod.POST, "/api/post/create","/api/comments/{postId}").authenticated() // ✅ 게시글 작성은 로그인 필요
-                        .requestMatchers(HttpMethod.PUT, "/api/post/**").authenticated() // ✅ 게시글 수정은 로그인 필요
+                        .requestMatchers(HttpMethod.PUT, "/api/post/**","/api/comments/{commentId}").authenticated() // ✅ 게시글 수정은 로그인 필요
                         .requestMatchers(HttpMethod.DELETE, "/api/post/**","/api/comments/{commentId}").authenticated() // ✅ 게시글 삭제도 로그인 필요
                         .anyRequest().authenticated()) // 나머지 요청은 인증 필요
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 X (JWT 기반 인증)

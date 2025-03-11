@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Button, List, ListItem, ListItemText, Typography, Divider } from "@mui/material";
+import { TextField, Button, List, ListItem, ListItemText, Typography, Divider, IconButton, Box } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 import axios from "axios";
 
 interface Comment {
@@ -11,15 +15,18 @@ interface Comment {
 const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const currentEmail = localStorage.getItem("email") || "";
+  const currentToken = localStorage.getItem("jwtToken") || "";
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("jwtToken");
-    fetchComments(storedToken);
+    fetchComments(currentToken);
   }, [postId]);
 
-  const fetchComments = async (jwtToken: string | null) => {
+  const fetchComments = async (jwtToken: string) => {
     try {
-      const headers = jwtToken ? { Authorization: `Bearer ${jwtToken}` } : {};
+      const headers = { Authorization: `Bearer ${jwtToken}` };
       const response = await axios.get(`http://localhost:9090/api/comments/${postId}`, { headers });
       setComments(response.data);
     } catch (error) {
@@ -30,14 +37,6 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
   const handleCommentSubmit = async () => {
     if (!content.trim()) {
       alert("⚠️ 댓글 내용을 입력해주세요.");
-      return;
-    }
-
-    const currentToken = localStorage.getItem("jwtToken");
-    const currentEmail = localStorage.getItem("email");
-
-    if (!currentToken || !currentEmail) {
-      alert("⚠️ 로그인 정보가 없습니다. 다시 로그인해주세요.");
       return;
     }
 
@@ -55,34 +54,125 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
           },
         }
       );
-
-      // 최신 댓글이 위에 오도록 정렬 변경
       setComments([response.data, ...comments]);
       setContent("");
     } catch (error: any) {
       console.error("❌ 댓글 작성 실패:", error);
-      if (error.response?.status === 403) {
-        alert("⚠️ 인증 실패: 토큰이 유효하지 않거나 권한이 없습니다.");
+      if (error.response) {
+        console.log("응답 데이터:", error.response.data, "상태:", error.response.status);
+        if (error.response.status === 403) {
+          alert(`⚠️ 인증 실패: ${error.response.data.message || "토큰이 유효하지 않거나 권한이 없습니다."}`);
+        } else {
+          alert(`❌ 댓글 작성 실패: ${error.response.data || "알 수 없는 오류"}`);
+        }
       } else {
-        alert(`❌ 댓글 작성 실패: ${error.response?.data || "알 수 없는 오류"}`);
+        alert("❌ 네트워크 오류가 발생했습니다.");
+      }
+    }
+  };
+
+  const handleEditStart = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditContent(comment.content);
+  };
+
+  const handleEditSave = async (commentId: number) => {
+    console.log("댓글 수정 - token:", currentToken, "email from storage:", currentEmail, "commentId:", commentId);
+
+    if (!currentToken || !currentEmail) {
+      alert("⚠️ 로그인 정보가 없습니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `http://localhost:9090/api/comments/${commentId}`,
+        {
+          content: editContent,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentToken}`,
+          },
+        }
+      );
+      setComments(
+        comments.map((comment) =>
+          comment.id === commentId ? { ...comment, content: response.data.content } : comment
+        )
+      );
+      setEditingCommentId(null);
+      setEditContent("");
+    } catch (error: any) {
+      console.error("❌ 댓글 수정 실패:", error);
+      if (error.response) {
+        console.log("응답 데이터:", error.response.data, "상태:", error.response.status, "헤더:", error.response.headers);
+        if (error.response.status === 403) {
+          alert(`⚠️ 인증 실패: ${error.response.data.message || "토큰이 유효하지 않거나 권한이 없습니다."}`);
+        } else {
+          alert(`❌ 댓글 수정 실패: ${error.response.data || "알 수 없는 오류"}`);
+        }
+      } else {
+        alert("❌ 네트워크 오류가 발생했습니다.");
+      }
+    }
+  };
+
+  const handleEditCancel = () => {
+    setEditingCommentId(null);
+    setEditContent("");
+  };
+
+  const handleDelete = async (commentId: number) => {
+    console.log("댓글 삭제 - token:", currentToken, "email:", currentEmail, "commentId:", commentId);
+
+    if (!currentToken || !currentEmail) {
+      alert("⚠️ 로그인 정보가 없습니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    if (!window.confirm("정말 삭제하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:9090/api/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${currentToken}`,
+        },
+        data: { email: currentEmail },
+      });
+      setComments(comments.filter((comment) => comment.id !== commentId));
+    } catch (error: any) {
+      console.error("❌ 댓글 삭제 실패:", error);
+      if (error.response) {
+        console.log("응답 데이터:", error.response.data, "상태:", error.response.status);
+        if (error.response.status === 403) {
+          alert(`⚠️ 인증 실패: ${error.response.data.message || "토큰이 유효하지 않거나 권한이 없습니다."}`);
+        } else {
+          alert(`❌ 댓글 삭제 실패: ${error.response.data || "알 수 없는 오류"}`);
+        }
+      } else {
+        alert("❌ 네트워크 오류가 발생했습니다.");
       }
     }
   };
 
   return (
-    <div style={{ marginTop: "40px" }}> {/* 게시글과 댓글 사이 간격 추가 */}
+    <div style={{ marginTop: "40px" }}>
       <Typography variant="h5" sx={{ mb: 2 }}>💬 댓글</Typography>
 
-      {/* 댓글 입력 폼을 최상단으로 이동 */}
       <div style={{ marginBottom: "20px" }}>
         <TextField
           label="댓글 작성"
-          fullWidth
+          fullWidth 
           value={content}
           onChange={(e) => setContent(e.target.value)}
           sx={{
             input: { color: "white" },
-            label: { color: "#aaa" },
+            label: { color: "#aaa",
+            },
             "& .MuiOutlinedInput-root": {
               "& fieldset": { borderColor: "#555" },
               "&:hover fieldset": { borderColor: "#888" },
@@ -96,16 +186,61 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
         </Button>
       </div>
 
-      {/* 댓글 리스트 */}
       <List sx={{ bgcolor: "#1e1e1e", borderRadius: "10px", p: 1 }}>
         {comments.length > 0 ? (
           comments.map((comment) => (
             <React.Fragment key={comment.id}>
-              <ListItem>
-                <ListItemText
-                  primary={<Typography sx={{ color: "#fff" }}>{comment.content}</Typography>}
-                  secondary={<Typography sx={{ color: "#aaa", fontSize: "0.9rem" }}>작성자: {comment.user.username}</Typography>}
-                />
+              <ListItem
+                disablePadding
+                sx={{display:'flex', gap:2, }}
+              >
+                {editingCommentId === comment.id ? (
+                  <TextField
+                    fullWidth
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    sx={{
+                      input: { color: "white" },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "#555" },
+                        "&:hover fieldset": { borderColor: "#888" },
+                      },
+                      bgcolor: "#1e1e1e",
+                      borderRadius: "5px",
+                      margin: '5px 0',
+                    }}
+                  />
+                ) : (
+                  <ListItemText
+                    primary={<Typography sx={{ color: "#fff" }}>{comment.content}</Typography>}
+                    secondary={<Typography sx={{ color: "#aaa", fontSize: "0.9rem" }}>작성자: {comment.user.username}</Typography>}
+                  />
+                )}
+                {
+                  currentEmail && currentEmail.length > 0 && ( // email 기반 체크 유지
+                      <Box display="flex" gap={2} sx={{paddingRight:'1rem'}}>
+                      {editingCommentId === comment.id ? (
+                        <>
+                          <IconButton edge="end" onClick={() => handleEditSave(comment.id)}>
+                            <SaveIcon sx={{ color: "#1976d2" }} />
+                          </IconButton>
+                          <IconButton edge="end" onClick={handleEditCancel}>
+                            <CancelIcon sx={{ color: "#d32f2f" }} />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <>
+                          <IconButton edge="end" onClick={() => handleEditStart(comment)}>
+                            <EditIcon sx={{ color: "#1976d2" }} />
+                          </IconButton>
+                          <IconButton edge="end" onClick={() => handleDelete(comment.id)}>
+                            <DeleteIcon sx={{ color: "#d32f2f" }} />
+                          </IconButton>
+                        </>
+                      )}
+                      </Box>
+                  )
+                }
               </ListItem>
               <Divider sx={{ bgcolor: "#444" }} />
             </React.Fragment>

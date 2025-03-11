@@ -41,6 +41,7 @@ const PostDetail: React.FC = () => {
       alert("게시글이 삭제되었습니다.");
       navigate("/blog"); // ✅ 삭제 후 목록으로 이동
     } catch (error) {
+      console.error(error);
       alert("게시글 삭제 실패!");
     }
   };

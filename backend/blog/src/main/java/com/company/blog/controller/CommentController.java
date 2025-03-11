@@ -3,6 +3,8 @@ package com.company.blog.controller;
 import com.company.blog.entity.Comment;
 import com.company.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
@@ -40,13 +43,44 @@ public class CommentController {
         Comment comment = commentService.createComment(postId, content, email);
         return ResponseEntity.ok(comment);
     }
-
-    // 댓글 삭제 (본인만)
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(
+    // ✅ 댓글 수정
+    @PutMapping("/{commentId}")
+    public ResponseEntity<?> updateComment(
             @PathVariable Long commentId,
+            @RequestBody(required = false) Map<String, String> request,
             @AuthenticationPrincipal UserDetails userDetails) {
-        commentService.deleteComment(commentId, userDetails.getUsername());
-        return ResponseEntity.noContent().build();
+        String authenticatedUsername = userDetails.getUsername();
+        log.info("댓글 수정 요청 - commentId: {}, authenticated username: {}, request email: {}, content: {}",
+                commentId, authenticatedUsername, request != null ? request.get("email") : null, request != null ? request.get("content") : null);
+        try {
+            String content = request != null ? request.get("content") : null;
+            if (content == null || content.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("댓글 내용이 비어있습니다.");
+            }
+            Comment updatedComment = commentService.updateComment(commentId, content, authenticatedUsername);
+            return ResponseEntity.ok(updatedComment);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> deleteComment(
+            @PathVariable Long commentId,
+            @RequestBody(required = false) Map<String, String> request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        log.info("댓글 삭제 요청 - commentId: {}, userDetails email: {}, request email: {}",
+                commentId, userDetails.getUsername(), request != null ? request.get("email") : null);
+        try {
+            String email = request != null ? request.get("email") : userDetails.getUsername();
+            commentService.deleteComment(commentId, email);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
     }
 }
