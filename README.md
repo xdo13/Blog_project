@@ -38,6 +38,10 @@
 ![image](https://github.com/user-attachments/assets/8bb7ac6b-03a8-430a-a7ec-465be397ff21)
 >게시판 아래에는 댓글창이 있어 로그인한 사람은 댓글을 입력할 수 있습니다.
 
+![image](https://github.com/user-attachments/assets/8c66a386-62d6-40ef-ad5c-8560d7bc28b8)
+>사진과 같이 댓글을 쓴 사람은 댓글을 수정 및 삭제가 가능합니다.
+
+
 
 
 ### 📌 JWT 토큰 사용 종류 및 설명  <br> <br>
