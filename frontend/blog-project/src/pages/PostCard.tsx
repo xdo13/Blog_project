@@ -2,9 +2,12 @@ import React from 'react';
 import { Card, CardContent, Typography, Avatar, Box } from '@mui/material';
 import { PostProps } from '../types/PostCard';
 
+// PostCard의 Props 인터페이스 정의
+interface PostCardProps {
+  post: PostProps;
+}
 
-
-const PostCard: React.FC<PostProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
     <Card
       sx={{
@@ -23,7 +26,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
           {post.content.length > 100 ? post.content.substring(0, 100) + '...' : post.content}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar sx={{ width: 32, height: 32, mr: 1}}></Avatar>
+          <Avatar sx={{ width: 32, height: 32, mr: 1 }} />
           <Typography variant="body2">{post.author}</Typography>
         </Box>
       </CardContent>

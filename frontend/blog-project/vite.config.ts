@@ -9,4 +9,7 @@ export default defineConfig({
       '/api': 'http://localhost:9090',
     },
   },
+  preview: {
+    port: 5173,
+  }
 });

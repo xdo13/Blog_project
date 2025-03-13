@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'; // ✅ 페이지 이동을 위�
 import { signUp } from '../../api/auth'; // ✅ API 연동 추가
 import AppAppBar from '../blog/components/AppAppBar';
 import Footer from '../blog/components/Footer';
+import { AxiosError } from 'axios';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -76,7 +77,8 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       alert('회원가입 성공!');
       navigate('/signin'); // ✅ 회원가입 후 로그인 페이지로 이동
     } catch (error) {
-      alert('회원가입 실패: ' + error.response?.data || '서버 오류');
+      const axiosError = error as AxiosError;
+      alert('로그인 실패: ' + (axiosError.response?.data || '아이디 혹은 비밀번호가 틀렸습니다.'));
     }
   };
 

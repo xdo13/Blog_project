@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid2';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -24,7 +23,7 @@ const cardData = [
     description:
       '이 자리에 첫번째 게시물에 대한 설명이 들어갑니다',
     authors: [
-      { name: 'Minwoo Kwon', },
+      { name: 'Minwoo Kwon', avatar: "/path/to/avatar1.jpg" },
     ],
   },
   {
@@ -33,7 +32,7 @@ const cardData = [
     title: '두번째 게시물',
     description:
       '이 자리에 두번째 게시물에 대한 설명이 들어갑니다',
-    authors: [{ name: 'Minwoo Kwon' }],
+    authors: [{ name: 'Minwoo Kwon', avatar: "/path/to/avatar2.jpg" }],
   },
   {
     img: 'https://picsum.photos/800/450?random=3',
@@ -41,7 +40,7 @@ const cardData = [
     title: '세번째 게시물',
     description:
       '현재는 랜덤 사진이 게시물 썸네일로 나오는 상태입니다.',
-    authors: [{ name: 'Minwoo Kwon',  }],
+    authors: [{ name: 'Minwoo Kwon', avatar: "/path/to/avatar3.jpg"  }],
   },
   {
     img: 'https://picsum.photos/800/450?random=4',
@@ -49,7 +48,7 @@ const cardData = [
     title: "네번째 게시물",
     description:
       "Take a look at our company's journey and the milestones we've achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.",
-    authors: [{ name: 'Minwoo Kwon', }],
+    authors: [{ name: 'Minwoo Kwon', avatar: "/path/to/avatar4.jpg" }],
   },
   {
     img: 'https://picsum.photos/800/450?random=5',
@@ -58,7 +57,7 @@ const cardData = [
     description:
       "다섯번째 게시물에 해당하는 간략한 설명이나 한 줄 요약이 들어가는 위치입니다.",
     authors: [
-      { name: '권민우',  },
+      { name: '권민우', avatar: "/path/to/avatar5.jpg" },
     ],
   },
   {
@@ -67,7 +66,7 @@ const cardData = [
     title: 'Maximizing efficiency with our latest product updates',
     description:
       'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
-    authors: [{ name: 'Minwoo Kwon', }],
+    authors: [{ name: 'Minwoo Kwon', avatar: "/path/to/avatar6.jpg" }],
   },
 ];
 
@@ -143,6 +142,7 @@ function Author({ authors }: { authors: { name: string; avatar: string }[] }) {
 
 export function Search() {
   return (
+    
     <FormControl sx={{ width: { xs: '100%', md: '25ch' } }} variant="outlined">
       <OutlinedInput
         size="small"
@@ -173,10 +173,6 @@ export default function MainContent() {
 
   const handleBlur = () => {
     setFocusedCardIndex(null);
-  };
-
-  const handleClick = () => {
-    console.info('You clicked the filter chip.');
   };
 
   return (

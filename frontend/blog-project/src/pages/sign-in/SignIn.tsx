@@ -16,6 +16,11 @@ import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import AppAppBar from '../blog/components/AppAppBar';
 import Footer from '../blog/components/Footer';
+import { AxiosError } from 'axios';
+
+
+
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -62,9 +67,9 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     setErrors(newErrors);
     if (!isValid) return;
-
     try {
-      const response = await login(form);
+      
+      const response = await login(form, false); // 또는 true로 설정
       const token = response.data.token; // JWT 토큰 추출
       console.log(token);
       alert("로그인 성공!");
@@ -72,7 +77,8 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
       navigate('/blog'); // ✅ 로그인 후 홈 페이지로 이동
     } catch (error) {
-      alert('로그인 실패: ' + (error.response?.data || '아이디 혹은 비밀번호가 틀렸습니다.'));
+      const axiosError = error as AxiosError;
+      alert('로그인 실패: ' + (axiosError.response?.data || '아이디 혹은 비밀번호가 틀렸습니다.'));
     }
   };
 

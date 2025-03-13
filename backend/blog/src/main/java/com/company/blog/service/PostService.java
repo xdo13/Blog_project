@@ -26,7 +26,7 @@ public class PostService {
     }
 
     public Page<Post> getAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+        return postRepository.findAllByOrderByIdDesc(pageable);
     }
 
     // 게시글 삭제 로직
