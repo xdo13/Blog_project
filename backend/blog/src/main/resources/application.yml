@@ -1,19 +1,25 @@
+spring:
+  profiles:
+    active: secret, common
+
+---
+
+spring.config.activate.on-profile: common
+
+
+
 server.port: 9090
 
 spring:
   application.name: blog
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/blogdb
-    username: bloguser
-    password: 12345
+
   jpa:
     properties.hibernate.format_sql: true
     show-sql: true
-    hibernate.ddl-auto: update
-  sql.init:
-    data-locations: classpath:/data.sql
-    mode: always
+    hibernate.ddl-auto: none
+#  sql.init:
+#    data-locations: classpath:/data.sql
+#    mode: always
 
 
 logging.level:
@@ -22,6 +28,3 @@ logging.level:
         SQL: INFO
         type.descriptor.sql.BasicBinder: TRACE
 
-jwt:
-  secret: f5760abc07a3c9b5ae0cdb292f2720c4132a10cd63c991e9e3eff2a0a93d471f1237be7e62900c09da1073c40b6b2b106121f063902625115915034171fd8738a31f8f2a6c8a02efe0a41562b533f61ce6fcc9337f8381ac67c7cf5134de9ddeefa8c820bc0ad56ea6f5244d8d05c441b3a86b2231c7ed43dfa66348976586f5e7eaffcd0a8c57dadf1578cd9e917c316f6433f3249290f9b43642940bc100e506b011bdbf00aaa70c0ca7cbad1e5d1a2a55ae69b203c44d06314ebc19b6e864e7b7983f81a0d8a0f6fbc84bd745b8968d822ab97f0b4686c5f8d2a99f0595707ab9394ef5b0414860764181bea657b98a4d2df783cbcaaf9e0bb261eb2f0cd595f47c9f1bae7a9e62f7b55c9deb7cf9183d67efd6e8007e0bdcf60289d81d72cafaf2b03b4007118b7a3c0ac46df6f11923e59fd695f491d31e995c00fe5acc2057b19453ff83dab9cee462ff4568ef0245a803096e8a226a668e6c1108933f42f7db57dab23f5d1dc81838a85e855adfe2830ed10be439e48a02d93233cd11e9872d21d31da02fba9d3886511078c8baac5de7a6053e745956f2b0903252a7e770e9de7528ed083d29af12da3f4d8e0cd1468f0f4ad76c4de610c582f2d9df834b62de392124257d9a9b2d57db2b15c61e895c9e7a26d6b1a1ef814ca2f2ff58de328e4fd7f755318da55213e1970a55badf5c5d4a29777661cbf89d53c936
-  expiration: 3600000
