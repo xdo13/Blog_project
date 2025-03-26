@@ -14,8 +14,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,62 +39,58 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Post> createPost(@RequestBody Map<String, String> request) {
-        String title = request.get("title");
-        String content = request.get("content");
-        String author = request.get("username");
-
-        Post post = postService.createPost(title, content, author);
-        return ResponseEntity.ok(post);
+    public ResponseEntity<Post> createPost(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("username") String username,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
+        try {
+            // PostService에서 모든 처리 (게시글 생성 + 파일 업로드)를 수행
+            Post post = postService.createPost(title, content, username, file);
+            return ResponseEntity.ok(post);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패: " + e.getMessage());
+        }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllPosts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Post> postPage = postService.getAllPosts(pageable);
         return ResponseEntity.ok(postPage.getContent());
     }
 
-    // ✅ 게시글 상세 조회 API 추가
     @GetMapping("/{id}")
     public ResponseEntity<Post> getPostById(@PathVariable Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
         return ResponseEntity.ok(post);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Object> updatePost(
             @PathVariable Long id,
             @RequestBody Post updatedPost,
             @AuthenticationPrincipal UserDetails userDetails) {
-
-        // 🔹 기존 게시글 조회
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
 
-        // 🔹 작성자만 수정 가능하도록 체크
         if (!post.getAuthor().equals(userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("게시글 수정 권한이 없습니다.");
         }
 
-        // 🔹 게시글 내용 업데이트
         post.setTitle(updatedPost.getTitle());
         post.setContent(updatedPost.getContent());
-
         postRepository.save(post);
         return ResponseEntity.ok(post);
     }
-    // ✅ 게시글 삭제 API
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id, Authentication authentication) {
-        String username = authentication.getName(); // JWT에서 현재 로그인한 유저 가져오기
+        String username = authentication.getName();
         postService.deletePost(id);
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
-
-
-
 }

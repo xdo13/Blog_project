@@ -6,7 +6,7 @@ import AppAppBar from "./blog/components/AppAppBar";
 import AppTheme from "../shared-theme/AppTheme";
 import Footer from "./blog/components/Footer";
 
-const API_URL = "http://localhost:9090/api/post"; // ✅ 백엔드 API URL
+const API_URL = "http://localhost:9090/api/post";
 
 const CreatePostPage = () => {
   const navigate = useNavigate();
@@ -15,34 +15,26 @@ const CreatePostPage = () => {
     content: "",
     username: "",
   });
-  const [token, setToken] = useState<string | null>(null); // ✅ JWT 토큰 상태 추가
+  const [file, setFile] = useState<File | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
-  // ✅ 로그인된 사용자 정보 가져오기
+  // 로그인 정보 가져오기
   useEffect(() => {
-    const storedToken = localStorage.getItem("jwtToken"); // ✅ 'jwtToken'으로 변경
+    const storedToken = localStorage.getItem("jwtToken");
     const storedUsername = localStorage.getItem("username");
-
-    console.log("🚀 localStorage에서 가져온 jwtToken:", storedToken);
-    console.log("🚀 localStorage에서 가져온 username:", storedUsername);
 
     if (storedToken && storedUsername) {
       setToken(storedToken);
-      setForm((prevForm) => ({
-        ...prevForm,
-        username: storedUsername,
-      }));
+      setForm((prev) => ({ ...prev, username: storedUsername }));
     }
   }, []);
 
-  // ✅ 토큰이 유효한지 확인 (만료된 경우 자동 로그아웃)
+  // 토큰 유효성 검사
   useEffect(() => {
     if (token) {
       try {
-        const decoded = JSON.parse(atob(token.split(".")[1])); // JWT 디코딩
-        const currentTime = Math.floor(Date.now() / 1000); // 현재 시간 (초 단위)
-
-        console.log("🚀 JWT 만료 시간:", decoded.exp);
-        console.log("🚀 현재 시간:", currentTime);
+        const decoded = JSON.parse(atob(token.split(".")[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
 
         if (decoded.exp < currentTime) {
           alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
@@ -52,7 +44,7 @@ const CreatePostPage = () => {
           navigate("/signin");
         }
       } catch (error) {
-        console.error("🚀 JWT 디코딩 중 오류 발생:", error);
+        console.error("JWT 디코딩 오류:", error);
         alert("잘못된 로그인 정보입니다. 다시 로그인해주세요.");
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("username");
@@ -60,35 +52,33 @@ const CreatePostPage = () => {
         navigate("/signin");
       }
     }
-  }, [token]);
+  }, [token, navigate]);
 
-  // 입력값 변경 핸들러
+  // 텍스트 입력 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 게시글 작성 API 요청 (Authorization 헤더 추가)
-  const createPost = async (postData: { title: string; content: string; username: string }) => {
-    try {
-      if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
-      }
+  // 파일 선택 핸들러
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(e.target.files?.[0] || null);
+  };
 
-      const response = await axios.post(
-        `${API_URL}/create`,
-        postData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // ✅ JWT 토큰 추가
-          },
-        }
-      );
+  // 게시글 작성 API 호출
+  const createPost = async (data: FormData) => {
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${API_URL}/create`, data, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("게시글 작성 실패:", error);
@@ -100,25 +90,24 @@ const CreatePostPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    const postData = new FormData();
+    postData.append("title", form.title);
+    postData.append("content", form.content);
+    postData.append("username", form.username);
+    if (file) {
+      postData.append("file", file);
+    }
+
     try {
-      if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
-      }
-
-      // ✅ 백엔드로 전송할 데이터 (작성자 포함)
-      const postData = {
-        title: form.title,
-        content: form.content,
-        username: form.username,
-      };
-
       await createPost(postData);
-
       alert("게시글이 등록되었습니다!");
-      navigate("/blog"); // 게시글 목록 페이지로 이동
+      navigate("/blog");
     } catch (error) {
-      console.error(error);
       alert("게시글 작성 중 오류가 발생했습니다.");
     }
   };
@@ -129,7 +118,7 @@ const CreatePostPage = () => {
       <CssBaseline enableColorScheme />
       <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>
         <Container maxWidth="md">
-          <Box sx={{ mt: 0, p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "background.paper" }}>
+          <Box sx={{ p: 3, boxShadow: 3, borderRadius: 2, bgcolor: "background.paper" }}>
             <Typography variant="h4" gutterBottom>
               블로그 글 작성 📝
             </Typography>
@@ -157,7 +146,6 @@ const CreatePostPage = () => {
                   margin="normal"
                   multiline
                   rows={6}
-                  sx={{ minHeight: "100px" }}
                   required
                 />
                 <TextField
@@ -166,10 +154,28 @@ const CreatePostPage = () => {
                   name="username"
                   value={form.username}
                   margin="normal"
-                  required
                   disabled
+                  required
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} disabled={!token}>
+                <Box sx={{ my: 2 }}>
+                  <Button variant="outlined" component="label">
+                    파일 업로드
+                    <input type="file" hidden onChange={handleFileChange} />
+                  </Button>
+                  {file && (
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      선택된 파일: {file.name}
+                    </Typography>
+                  )}
+                </Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={!token}
+                  sx={{ mt: 2 }}
+                >
                   게시글 작성
                 </Button>
               </form>

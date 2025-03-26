@@ -13,6 +13,8 @@ server.port: 9090
 spring:
   application.name: blog
 
+
+
   jpa:
     properties.hibernate.format_sql: true
     show-sql: true

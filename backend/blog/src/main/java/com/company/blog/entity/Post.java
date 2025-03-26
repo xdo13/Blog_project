@@ -28,8 +28,12 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private String author; // 작성자 정보
+    private String author;
+
+    @Column(nullable = true)
+    private String filePath;
 
     @Column(nullable = false, updatable = false)
+    @Builder.Default // ✅ Builder 사용 시 기본값 보장
     private LocalDateTime createdAt = LocalDateTime.now();
 }
