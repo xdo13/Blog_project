@@ -42,8 +42,9 @@
 ![image](https://github.com/user-attachments/assets/e735e21e-9d61-42d7-bb01-36e63b380e9a)
 >메인 화면 첫번째는 랜덤이미지를 포함한 견본 게시판이 있습니다.
 
-![image](https://github.com/user-attachments/assets/f9f0ee12-84d7-42e2-9d12-91d1c35fc935)
->그 아래 화면에는 게시판 작성시 DB에 저장되고 그것을 읽어오는 실기능의 게시판이 있습니다.
+![image](https://github.com/user-attachments/assets/548e29f4-611f-457f-bdae-c99416f530f0)
+
+>그 아래 화면에는 게시판 작성시 DB에 저장되고 그것을 읽어오는 실기능의 게시판이 있습니다. + 이미지추가(03.28)<br>
 >페이스북처럼 스크롤을 내리면 계속 게시글이 나타납니다.
 
 ![image](https://github.com/user-attachments/assets/8bb7ac6b-03a8-430a-a7ec-465be397ff21)
