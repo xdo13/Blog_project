@@ -1,4 +1,5 @@
 export interface PostProps {
+  filePath?: string;
   id: number; // 게시글 고유 ID
   title: string; // 게시글 제목
   content: string; // 게시글 내용

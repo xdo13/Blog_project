@@ -4,11 +4,14 @@ import com.company.blog.entity.Post;
 import com.company.blog.repository.PostRepository;
 import com.company.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -92,5 +96,19 @@ public class PostController {
         String username = authentication.getName();
         postService.deletePost(id);
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
+    }
+    // 이미지 제공 엔드포인트 추가
+    @GetMapping("/images/{filename}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        // 파일 경로 (실제 저장 경로로 수정 필요)
+        String uploadDir = "C:/kmw_data/Blog_project/backend/uploads/";
+        File file = new File(uploadDir + filename);
+
+        if (file.exists()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // 이미지 타입에 따라 동적으로 설정 가능
+                    .body(new FileSystemResource(file));
+        }
+        return ResponseEntity.notFound().build();
     }
 }
