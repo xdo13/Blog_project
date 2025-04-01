@@ -18,7 +18,7 @@ const PostEditPage = () => {
     const fetchPost = async () => {
       try {
         console.log("현재 JWT 토큰:", token);
-        const response = await axios.get(`http://localhost:9090/api/post/${postId}`, {
+        const response = await axios.get(`http://1.2.3.4:9090/api/post/${postId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setForm(response.data);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:9090/api/post";
+const API_URL = `${import.meta.env.VITE_API_ROOT}/api/post`;
 
 // ✅ 게시글 작성 API 요청 함수
 const createPost = async (postData: { title: string; content: string; author: string }) => {

@@ -3,6 +3,8 @@ package com.company.blog.controller;
 import com.company.blog.entity.Post;
 import com.company.blog.repository.PostRepository;
 import com.company.blog.service.PostService;
+import com.company.blog.service.S3Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -32,15 +34,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/post")
 @CrossOrigin(origins = "http://localhost:5173") // React 연결
+@RequiredArgsConstructor
 public class PostController {
-    @Autowired
     private final PostService postService;
     private final PostRepository postRepository;
+    private final S3Service s3Service;
 
-    public PostController(PostService postService, PostRepository postRepository) {
-        this.postService = postService;
-        this.postRepository = postRepository;
-    }
 
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(
@@ -49,8 +48,8 @@ public class PostController {
             @RequestParam("username") String username,
             @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-            // PostService에서 모든 처리 (게시글 생성 + 파일 업로드)를 수행
-            Post post = postService.createPost(title, content, username, file);
+            String url = s3Service.uploadFile(file);
+            Post post = postService.createPost(title, content, username, url);
             return ResponseEntity.ok(post);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패: " + e.getMessage());

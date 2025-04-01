@@ -21,40 +21,14 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Post createPost(String title, String content, String author, MultipartFile file) throws IOException {
+    public Post createPost(String title, String content, String author, String url) throws IOException {
         Post post = Post.builder()
                 .title(title)
                 .content(content)
                 .author(author)
                 .createdAt(LocalDateTime.now()) // ✅ createdAt 명시적 설정
+                .filePath(url)
                 .build();
-
-        // 파일 처리
-        if (file != null && !file.isEmpty()) {
-            // 업로드 디렉토리 설정 (프로젝트 루트 기준)
-            String uploadDir = "uploads";
-            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-
-            // 디렉토리 생성
-            try {
-                Files.createDirectories(uploadPath);
-                System.out.println("디렉토리 생성 성공: " + uploadPath.toString());
-            } catch (IOException e) {
-                throw new IOException("디렉토리 생성 실패: " + uploadPath, e);
-            }
-
-            // 파일 이름 생성 및 저장
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Path filePath = uploadPath.resolve(fileName);
-
-            try {
-                Files.copy(file.getInputStream(), filePath);
-                System.out.println("파일 저장 성공: " + filePath.toString());
-                post.setFilePath(filePath.toString()); // 절대 경로 저장
-            } catch (IOException e) {
-                throw new IOException("파일 저장 실패: " + filePath, e);
-            }
-        }
 
         return postRepository.save(post);
     }

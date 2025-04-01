@@ -48,7 +48,7 @@ const PostList: React.FC = () => {
         },
       };
 
-      const response = await axios.get("http://localhost:9090/api/post/all", config);
+      const response = await axios.get(`${import.meta.env.VITE_API_ROOT}/api/post/all`, config);
       const newPosts = response.data;
 
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);

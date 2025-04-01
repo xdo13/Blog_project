@@ -6,7 +6,7 @@ import AppAppBar from "./blog/components/AppAppBar";
 import AppTheme from "../shared-theme/AppTheme";
 import Footer from "./blog/components/Footer";
 
-const API_URL = "http://localhost:9090/api/post";
+const API_URL = `${import.meta.env.VITE_API_ROOT}/api/post`;
 
 const CreatePostPage = () => {
   const navigate = useNavigate();

@@ -7,12 +7,8 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const baseImageUrl = 'http://localhost:9090/api/post/images/';
-
   // filePath에서 파일명만 추출 (슬래시(/)와 백슬래시(\\) 모두 처리)
-  const fileName = post.filePath
-    ? post.filePath.split(/[\\/]/).pop() // 슬래시(/) 또는 백슬래시(\\)로 분리
-    : null;
+  const fileName = post.filePath;
 
   return (
     <Card
@@ -33,7 +29,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <CardMedia
             component="img"
             height="200"
-            image={`${baseImageUrl}${fileName}`} // 파일명만 사용
+            image={`${fileName}`} // 파일명만 사용
             alt={post.title}
             sx={{ borderRadius: '8px', mb: 2, objectFit: 'cover' }}
           />

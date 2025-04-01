@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:9090/api/post";
+const API_BASE_URL = `${import.meta.env.VITE_API_ROOT}/api/post`;
 
 // ✅ 게시글 생성 API (JWT 포함)
 export const createPost = async (postData: { title: string; content: string; username: string }, token: string) => {

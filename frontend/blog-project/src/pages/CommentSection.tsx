@@ -27,7 +27,7 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
   const fetchComments = async (jwtToken: string) => {
     try {
       const headers = { Authorization: `Bearer ${jwtToken}` };
-      const response = await axios.get(`http://localhost:9090/api/comments/${postId}`, { headers });
+      const response = await axios.get(`${import.meta.env.VITE_API_ROOT}/api/comments/${postId}`, { headers });
       setComments(response.data);
     } catch (error) {
       console.error("❌ 댓글 불러오기 실패:", error);
@@ -42,7 +42,7 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:9090/api/comments/${postId}`,
+        `${import.meta.env.VITE_API_ROOT}/api/comments/${postId}`,
         {
           content: content,
           email: currentEmail,
@@ -86,7 +86,7 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:9090/api/comments/${commentId}`,
+        `${import.meta.env.VITE_API_ROOT}/api/comments/${commentId}`,
         {
           content: editContent,
         },
@@ -137,7 +137,7 @@ const CommentSection: React.FC<{ postId: number }> = ({ postId }) => {
     }
 
     try {
-      await axios.delete(`http://localhost:9090/api/comments/${commentId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_ROOT}/api/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${currentToken}`,
         },
