@@ -19,7 +19,7 @@ const cardData = [
   {
     img: 'https://picsum.photos/800/450?random=1',
     tag: 'React',
-    title: '첫번째 게시물물물',
+    title: '첫번째 게시물',
     description:
       '이 자리에 첫번째 게시물에 대한 설명이 들어갑니다',
     authors: [
