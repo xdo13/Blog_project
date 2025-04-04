@@ -21,8 +21,18 @@ docker-compose build $NEW_CONTAINER
 docker-compose up -d $NEW_CONTAINER
 
 # 2. 새 컨테이너가 정상적으로 실행되는지 확인
-sleep 10  # 컨테이너 시작 대기
-HEALTH_CHECK=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:$NEW_PORT/actuator/health)
+# 헬스 체크 반복 시도 (최대 60초)
+ATTEMPTS=12
+for i in $(seq 1 $ATTEMPTS); do
+    echo "헬스 체크 시도 $i/$ATTEMPTS..."
+    HEALTH_CHECK=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:$NEW_PORT/actuator/health)
+    if [ "$HEALTH_CHECK" -eq "200" ]; then
+        echo "헬스 체크 성공!"
+        break
+    fi
+    sleep 5
+done
+
 if [ "$HEALTH_CHECK" -ne "200" ]; then
     echo "새 컨테이너($NEW_CONTAINER) 상태 확인 실패. 배포 중단."
     docker-compose stop $NEW_CONTAINER
@@ -30,8 +40,8 @@ if [ "$HEALTH_CHECK" -ne "200" ]; then
 fi
 
 # 3. Nginx 설정 업데이트 (새 컨테이너로 트래픽 전환)
-sed -i "s/server $OLD_CONTAINER:9091;/server $OLD_CONTAINER:9091 backup;/" nginx.conf
-sed -i "s/server $NEW_CONTAINER:9091 backup;/server $NEW_CONTAINER:9091;/" nginx.conf
+sed -i "s/server $OLD_CONTAINER:9090;/server $OLD_CONTAINER:9090 backup;/" nginx.conf
+sed -i "s/server $NEW_CONTAINER:9090 backup;/server $NEW_CONTAINER:9090;/" nginx.conf
 docker exec -it nginx nginx -s reload
 
 # 4. 이전 컨테이너 중지

@@ -1,17 +1,5 @@
 version: '3'
 services:
-  db:
-    image: mysql:8
-    container_name: blog_db
-    environment:
-      MYSQL_DATABASE: blog
-      MYSQL_USER: bloguser
-      MYSQL_PASSWORD: blogpassword1506
-      MYSQL_ROOT_PASSWORD: 12345
-    ports:
-      - "3306:3306"
-    volumes:
-      - db-data:/var/lib/mysql
 
   blue:
     build: .
@@ -19,12 +7,10 @@ services:
       - "9090:9090"
     environment:
       - SPRING_PROFILES_ACTIVE=secret,common
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/blog
+      - SPRING_DATASOURCE_URL=jdbc:mysql://my-rds-db.cjwgwaim6c3t.ap-northeast-2.rds.amazonaws.com:3306/blogdb
       - SPRING_DATASOURCE_USERNAME=bloguser
-      - SPRING_DATASOURCE_PASSWORD=blogpass
+      - SPRING_DATASOURCE_PASSWORD=blogpassword1506
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
-    depends_on:
-      - db
     container_name: blue
 
   green:
@@ -33,12 +19,10 @@ services:
       - "9091:9090"
     environment:
       - SPRING_PROFILES_ACTIVE=secret,common
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/blog
+      - SPRING_DATASOURCE_URL=jdbc:mysql://my-rds-db.cjwgwaim6c3t.ap-northeast-2.rds.amazonaws.com:3306/blogdb
       - SPRING_DATASOURCE_USERNAME=bloguser
-      - SPRING_DATASOURCE_PASSWORD=blogpass
+      - SPRING_DATASOURCE_PASSWORD=blogpassword1506
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
-    depends_on:
-      - db
     container_name: green
 
   nginx:
@@ -50,6 +34,3 @@ services:
     depends_on:
       - blue
       - green
-
-volumes:
-  db-data:
