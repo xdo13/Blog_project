@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
                 .cors(Customizer.withDefaults()) // CORS 설정 기본값 사용
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll() // 헬스체크 허용
                         .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll() // 회원가입, 로그인은 모든 사용자 접근 가능
                         .requestMatchers(HttpMethod.GET, "/api/post/all", "/api/post/{id}", "/api/comments/{postId}","/api/post/images/**").permitAll() // 게시글 조회는 허용
                         .requestMatchers(HttpMethod.POST, "/api/post/create","/api/comments/{postId}").authenticated() // ✅ 게시글 작성은 로그인 필요

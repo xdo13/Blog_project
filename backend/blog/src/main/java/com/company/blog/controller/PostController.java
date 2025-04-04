@@ -94,7 +94,7 @@ public class PostController {
     public ResponseEntity<String> deletePost(@PathVariable Long id, Authentication authentication) {
         String username = authentication.getName();
         postService.deletePost(id);
-        return ResponseEntity.ok("게시글이 삭제되었습니다.");
+        return ResponseEntity.ok("게시글이 삭제되었습니다");
     }
     // 이미지 제공 엔드포인트 추가
     @GetMapping("/images/{filename}")
