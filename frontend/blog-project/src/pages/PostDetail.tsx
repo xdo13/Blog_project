@@ -53,7 +53,7 @@ const PostDetail: React.FC = () => {
       <AppAppBar />
       <CssBaseline enableColorScheme />
       <Stack direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>
-        <Container maxWidth="md" sx={{ mt: 5 }}>
+        <Container maxWidth="md" sx={{ mt: 10 }}>
           {post ? (
             <Paper sx={{ p: 3 }}>
               {/* 제목과 버튼을 같은 행에 배치 */}
