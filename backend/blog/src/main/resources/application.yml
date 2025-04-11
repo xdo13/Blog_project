@@ -12,7 +12,8 @@ server.port: 9090
 
 spring:
   application.name: blog
-
+  config:
+    import: optional:classpath:application-secret.yml
 
 
   jpa:
