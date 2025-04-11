@@ -36,6 +36,13 @@ jobs:
       - name: Build with Gradle
         working-directory: ./backend/blog
         run: ./gradlew clean build
+      # application-secret.yml 복원
+      - name: Restore application-secret.yml
+        env:
+          APPLICATION_SECRET_YML: ${{ secrets.APPLICATION_SECRET_YML }}
+        run: |
+          echo "$APPLICATION_SECRET_YML" > backend/blog/src/main/resources/application-secret.yml
+
 
       # 5. Docker 이미지 빌드
       - name: Build Docker image
