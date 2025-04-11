@@ -32,16 +32,18 @@ jobs:
       - name: Grant execute permission to gradlew
         working-directory: ./backend/blog
         run: chmod +x ./gradlew
-      # 4. Gradle 빌드 및 테스트
-      - name: Build with Gradle
-        working-directory: ./backend/blog
-        run: ./gradlew clean build
-      # application-secret.yml 복원
+
+       # application-secret.yml 복원
       - name: Restore application-secret.yml
         env:
           APPLICATION_SECRET_YML: ${{ secrets.APPLICATION_SECRET_YML }}
         run: |
           echo "$APPLICATION_SECRET_YML" > backend/blog/src/main/resources/application-secret.yml
+          
+      # 4. Gradle 빌드 및 테스트
+      - name: Build with Gradle
+        working-directory: ./backend/blog
+        run: ./gradlew clean build
 
 
       # 5. Docker 이미지 빌드
