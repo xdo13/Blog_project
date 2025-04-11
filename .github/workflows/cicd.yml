@@ -29,6 +29,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('backend/blog/**/*.gradle*', 'backend/blog/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Grant execute permission to gradlew
+        working-directory: ./backend/blog
+        run: chmod +x ./gradlew
       # 4. Gradle 빌드 및 테스트
       - name: Build with Gradle
         working-directory: ./backend/blog
