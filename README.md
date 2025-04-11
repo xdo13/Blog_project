@@ -22,6 +22,7 @@
 
 ![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white&logoWidth=15) ![Java 17](https://img.shields.io/badge/Java%2017-ED8B00?style=flat-square&logo=openjdk&logoColor=white&logoWidth=15)  ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB&logoWidth=15) ![JPA](https://img.shields.io/badge/JPA-6DB33F?style=flat-square&logo=hibernate&logoColor=white&logoWidth=15)  ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white&logoWidth=15)  ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonaws&logoColor=white&logoWidth=15)  ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white&logoWidth=15)  ![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white&logoWidth=15)
 
+### 📌 히스토리  <br> <br>
 
 >2.28 JWT 적용 및 회원가입, 로그인 기능 완료 <br>
 >3.4 게시판 세부 페이지 구현 완료 <br>
@@ -33,7 +34,8 @@
 >3.14 배포완료<br>
 >프론트 CI/CD 구축<br>
 >Docker/Nginx를 활용한 무중단배포 환경 구축<br>
->4.8 게시물 세부페이지에 이미지 출력 기능 추가
+>4.8 게시물 세부페이지에 이미지 출력 기능 추가<br>
+>4.11 백엔드에서 CI/CD 구현 - 자동배포 완료 
 
 
 
