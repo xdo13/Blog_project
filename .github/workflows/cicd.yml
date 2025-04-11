@@ -26,48 +26,50 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('backend/blog/**/*.gradle*', 'backend/blog/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle
 
       # 4. Gradle 빌드 및 테스트
       - name: Build with Gradle
+        working-directory: ./backend/blog
         run: ./gradlew clean build
 
       # 5. Docker 이미지 빌드
       - name: Build Docker image
+        working-directory: ./backend/blog
         run: |
           docker build -t blog:${{ github.run_number }} .
 
       # 6. Docker 이미지 저장
       - name: Save Docker image
         run: |
-          docker save blog:${{ github.run_number }} | gzip > blog-${{ github.run_number }}.tar.gz
+          docker save blog:${{ github.run_number }} | gzip > backend/blog/blog-${{ github.run_number }}.tar.gz
 
       # 7. EC2로 파일 전송 및 배포
       - name: Deploy to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USER: ec2-user
+          EC2_USER: ubuntu
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         run: |
           echo "$EC2_SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
           # docker-compose.yml과 nginx.conf 전송
-          scp -o StrictHostKeyChecking=no -i private_key.pem docker-compose.yml ${EC2_USER}@${EC2_HOST}:/home/ec2-user/docker-compose.yml
-          scp -o StrictHostKeyChecking=no -i private_key.pem nginx.conf ${EC2_USER}@${EC2_HOST}:/home/ec2-user/nginx.conf
-          # Docker 이미지 tar 파일 전송
-          scp -o StrictHostKeyChecking=no -i private_key.pem blog-${{ github.run_number }}.tar.gz ${EC2_USER}@${EC2_HOST}:/home/ec2-user/blog-${{ github.run_number }}.tar.gz
+          scp -o StrictHostKeyChecking=no -i private_key.pem backend/blog/docker-compose.yml ${EC2_USER}@${EC2_HOST}:/home/ubuntu/docker-compose.yml
+          scp -o StrictHostKeyChecking=no -i private_key.pem backend/blog/nginx.conf ${EC2_USER}@${EC2_HOST}:/home/ubuntu/nginx.conf
+          scp -o StrictHostKeyChecking=no -i private_key.pem backend/blog/deploy.sh ${EC2_USER}@${EC2_HOST}:/home/ubuntu/nginx.conf
+          scp -o StrictHostKeyChecking=no -i private_key.pem backend/blog/blog-${{ github.run_number }}.tar.gz ${EC2_USER}@${EC2_HOST}:/home/ubuntu/blog-${{ github.run_number }}.tar.gz
           # EC2에서 배포
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${EC2_USER}@${EC2_HOST} << 'EOF'
             # Docker 이미지 로드
-            docker load -i /home/ec2-user/blog-${{ github.run_number }}.tar.gz
+            docker load -i /home/ubuntu/blog-${{ github.run_number }}.tar.gz
             # docker-compose.yml에서 build 대신 image 사용
-            sed -i '/build: ./d' /home/ec2-user/docker-compose.yml
-            sed -i "s|image: blog:.*|image: blog:${{ github.run_number }}|g" /home/ec2-user/docker-compose.yml
+            sed -i '/build: ./d' /home/ubuntu/docker-compose.yml
+            sed -i "s|image: blog:.*|image: blog:${{ github.run_number }}|g" /home/ubuntu/docker-compose.yml
             # 배포 스크립트 실행
-            chmod +x /home/ec2-user/deploy.sh
-            /home/ec2-user/deploy.sh
+            chmod +x /home/ubuntu/deploy.sh
+            /home/ubuntu/deploy.sh
             # 임시 파일 정리
-            rm /home/ec2-user/blog-${{ github.run_number }}.tar.gz
+            rm /home/ubuntu/blog-${{ github.run_number }}.tar.gz
           EOF
-          rm -f private_key.pem blog-${{ github.run_number }}.tar.gz
+          rm -f private_key.pem backend/blog/blog-${{ github.run_number }}.tar.gz
