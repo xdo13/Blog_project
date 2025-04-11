@@ -39,7 +39,7 @@ jobs:
           APPLICATION_SECRET_YML: ${{ secrets.APPLICATION_SECRET_YML }}
         run: |
           echo "$APPLICATION_SECRET_YML" > backend/blog/src/main/resources/application-secret.yml
-          
+
       # 4. Gradle 빌드 및 테스트
       - name: Build with Gradle
         working-directory: ./backend/blog
@@ -85,3 +85,4 @@ jobs:
             rm /home/ubuntu/blog-${{ github.run_number }}.tar.gz
           EOF
           rm -f private_key.pem backend/blog/blog-${{ github.run_number }}.tar.gz
+          rm -f backend/blog/src/main/resources/application-secret.yml
