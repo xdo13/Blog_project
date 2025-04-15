@@ -18,28 +18,80 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         borderRadius: '10px',
         overflow: 'hidden',
         padding: '16px',
+        height: '380px', // 카드 높이를 약간 늘려서 공간 확보 (필요에 따라 조정)
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      <CardContent>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1 }}>
+      <CardContent sx={{ padding: 0, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        {/* 이미지 영역 */}
+        <Box
+          sx={{
+            height: '200px', // 이미지 영역 고정 높이
+            width: '100%',
+            backgroundColor: '#2a2a2a',
+            borderRadius: '8px',
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {fileName ? (
+            <CardMedia
+              component="img"
+              height="200"
+              image={`${fileName}`}
+              alt={post.title}
+              sx={{ borderRadius: '8px', objectFit: 'cover' }}
+            />
+          ) : (
+            <Typography variant="body2" sx={{ color: '#888' }}>
+              이미지가 없습니다
+            </Typography>
+          )}
+        </Box>
+
+        {/* 제목 영역 */}
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 'bold',
+            mb: 1,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap', // 한 줄로 제한
+          }}
+        >
           {post.title}
         </Typography>
 
-        {fileName && (
-          <CardMedia
-            component="img"
-            height="200"
-            image={`${fileName}`} // 파일명만 사용
-            alt={post.title}
-            sx={{ borderRadius: '8px', mb: 2, objectFit: 'cover' }}
-          />
-        )}
-
-        <Typography variant="body2" sx={{ opacity: 0.8, mb: 2 }}>
-          {post.content.length > 100 ? post.content.substring(0, 100) + '...' : post.content}
+        {/* 내용 영역 */}
+        <Typography
+          variant="body2"
+          sx={{
+            opacity: 0.8,
+            mb: 2,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2, // 최대 2줄로 제한
+            WebkitBoxOrient: 'vertical',
+            flexGrow: 1, // 남은 공간을 차지
+            maxHeight: '40px', // 내용 높이를 제한 (2줄에 맞게 조정)
+          }}
+        >
+          {post.content}
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {/* 작성자 영역 */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            mt: 'auto', // 하단에 고정
+          }}
+        >
           <Avatar sx={{ width: 32, height: 32, mr: 1 }} />
           <Typography variant="body2">{post.author}</Typography>
         </Box>

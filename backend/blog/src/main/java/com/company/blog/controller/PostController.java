@@ -48,7 +48,13 @@ public class PostController {
             @RequestParam("username") String username,
             @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-            String url = s3Service.uploadFile(file);
+            // 파일이 존재하면 S3에 업로드, 없으면 url을 null로 설정
+            String url = null;
+            if (file != null && !file.isEmpty()) {
+                url = s3Service.uploadFile(file);
+            }
+
+            // 게시글 생성
             Post post = postService.createPost(title, content, username, url);
             return ResponseEntity.ok(post);
         } catch (IOException e) {
