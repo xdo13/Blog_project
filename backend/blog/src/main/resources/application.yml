@@ -26,7 +26,7 @@ spring:
 
 
 logging.level:
-  com.company.blog: DEBUG
+  com.company.blog: info
   org:
       hibernate:
         SQL: INFO
