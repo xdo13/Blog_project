@@ -60,11 +60,14 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
+        Date expirationDate = new Date(System.currentTimeMillis() + expiration);
+        log.info("Generating JWT for {} with expiration: {} ({} minutes from now)",
+                subject, expirationDate, expiration / 1000 / 60);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(expirationDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -26,7 +26,8 @@ spring:
 
 
 logging.level:
-    org:
+  com.company.blog: DEBUG
+  org:
       hibernate:
         SQL: INFO
         type.descriptor.sql.BasicBinder: TRACE

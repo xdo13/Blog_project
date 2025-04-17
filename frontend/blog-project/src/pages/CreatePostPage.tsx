@@ -19,6 +19,7 @@ const CreatePostPage = () => {
   const [token, setToken] = useState<string | null>(null);
 
   // 로그인 정보 가져오기
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("jwtToken");
     const storedUsername = localStorage.getItem("username");

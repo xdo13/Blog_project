@@ -83,6 +83,9 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small">JAVA</Button>
               <Button variant="text" color="info" size="small">MySQL</Button>
               <Button variant="text" color="info" size="small">AWS</Button>
+              <Button variant="text" color="info" size="small">CI/CD</Button>
+              <Button variant="text" color="info" size="small">Docker</Button>
+              <Button variant="text" color="info" size="small">Nginx</Button>
             </Box>
           </Box>
           
