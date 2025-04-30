@@ -58,6 +58,9 @@ export default function AppAppBar() {
   const handleClick = () => {
     navigate("/blog"); // 원하는 경로로 설정
   };
+  const handleButtonClick = () => {
+    navigate('/store'); // '/store' 경로로 이동 (store.tsx와 매핑된 경로)
+  };
 
   return (
     <AppBar
@@ -86,6 +89,7 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small">CI/CD</Button>
               <Button variant="text" color="info" size="small">Docker</Button>
               <Button variant="text" color="info" size="small">Nginx</Button>
+              <Button variant="text" color="info" size="small" onClick={handleButtonClick}>상점기능넣어보기</Button>
             </Box>
           </Box>
           

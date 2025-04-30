@@ -7,6 +7,7 @@ import PostList from './pages/PostList';
 import PostDetail from './pages/PostDetail';
 import PostEditPage from './pages/PostEditPage';
 import ScrollToTop from './components/scrollToTop';
+import Store from './pages/blog/components/store';
 
 
 
@@ -16,6 +17,7 @@ const App = () => (
   <Routes>
     <Route index element={<Navigate to={'/blog'} />} />
     <Route path="blog" element={<Blog />} />
+    <Route path="store" element={<Store />} />
     <Route path="post" >
       <Route index element = {<PostList />} />
       <Route path="create" element={<CreatePostPage />} />
